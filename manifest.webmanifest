@@ -1,6 +1,6 @@
 {
-  "name": "¿Siembro o no siembro? Rentabilidad de cultivos",
-  "short_name": "Siembro",
+  "name": "Siembro Colombia: ¿siembro o no siembro?",
+  "short_name": "Siembro Colombia",
   "description": "Calcule costos de siembra, rentabilidad y riego según municipio, suelo y clima en Colombia.",
   "lang": "es-CO",
   "start_url": "./",

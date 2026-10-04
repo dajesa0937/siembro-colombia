@@ -1,4 +1,4 @@
-// Siembro — pronóstico Open-Meteo y recomendación de riego diaria
+// Siembro Colombia — pronóstico Open-Meteo y recomendación de riego diaria
 // Archivo cargado como script clásico: las constantes y funciones quedan globales y las usan los demás archivos.
 
 // ---------- Clima (Open-Meteo, gratis y sin clave) ----------

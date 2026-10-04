@@ -1,4 +1,4 @@
-# 🌱 Siembro — ¿Siembro o no siembro?
+# 🌱 Siembro Colombia — ¿Siembro o no siembro?
 
 Aplicación web progresiva (PWA) para agricultores y ganaderos de Colombia. Le dice a la persona si un cultivo es rentable en su municipio, cuánto debe invertir, cuánto ganaría, qué sistema de riego gasta menos agua y si el agua que tiene le alcanza. Incluye el pronóstico del clima, fichas técnicas con fotos y una guía para aprender a hacer las cuentas.
 
@@ -71,7 +71,7 @@ GitHub Actions también corre las pruebas (`.github/workflows/pruebas.yml`), par
 
 ### Antes de cada publicación
 
-Suba la versión en `sw.js` (`siembro-v4` → `siembro-v5`). Si no, los celulares que ya la instalaron pueden seguir viendo la versión anterior.
+Suba la versión en `sw.js` (`siembrocolombia-v5` → `siembrocolombia-v6`). Si no, los celulares que ya la instalaron pueden seguir viendo la versión anterior.
 
 ## Cómo se calcula
 

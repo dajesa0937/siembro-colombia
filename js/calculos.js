@@ -1,4 +1,4 @@
-// Siembro — cálculos puros (sin DOM): aptitud, agua, finanzas y veredicto
+// Siembro Colombia — cálculos puros (sin DOM): aptitud, agua, finanzas y veredicto
 // Archivo cargado como script clásico: las constantes y funciones quedan globales y las usan los demás archivos.
 
 function aptitud(c,L,suelo,ph,modo){

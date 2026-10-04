@@ -1,4 +1,4 @@
-// Siembro — fichas técnicas, zonas de suelo y fotos de riego
+// Siembro Colombia — fichas técnicas, zonas de suelo y fotos de riego
 // Archivo cargado como script clásico: las constantes y funciones quedan globales y las usan los demás archivos.
 
 // ---------- Fichas técnicas (valores de referencia; ajustar con análisis de suelo y agrónomo) ----------

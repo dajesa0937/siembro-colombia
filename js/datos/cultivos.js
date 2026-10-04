@@ -1,4 +1,4 @@
-// Siembro — cultivos, sistemas de riego y parámetros económicos de referencia
+// Siembro Colombia — cultivos, sistemas de riego y parámetros económicos de referencia
 // Archivo cargado como script clásico: las constantes y funciones quedan globales y las usan los demás archivos.
 
 const S=(a,b,c,d,e)=>({arenoso:a,"franco-arenoso":b,franco:c,"franco-arcilloso":d,arcilloso:e});

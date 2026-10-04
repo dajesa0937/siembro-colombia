@@ -26,6 +26,7 @@ h1,h2,h3{font-family:Bitter,Georgia,"Times New Roman",serif;line-height:1.15;mar
 header.top{padding:12px 0 18px;border-bottom:2px solid var(--tierra);margin-bottom:18px}
 header.top h1{font-size:clamp(2rem,7vw,3.2rem);font-weight:800;letter-spacing:-.02em;max-width:16ch}
 header.top p{margin:.5rem 0 0;color:var(--muted);max-width:62ch}
+header.top p.lema{margin:.2rem 0 0;font-family:Bitter,Georgia,serif;font-size:clamp(1.15rem,4vw,1.5rem);font-weight:700;color:var(--ocre)}
 nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;display:grid;grid-template-columns:repeat(4,1fr);background:var(--paper);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
 nav.tabs button{all:unset;cursor:pointer;text-align:center;padding:10px 2px 9px;font-weight:600;font-size:.84rem;color:var(--muted);border-top:3px solid transparent}
 nav.tabs button svg{display:block;margin:0 auto 2px;width:24px;height:24px}

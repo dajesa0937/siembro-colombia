@@ -1,4 +1,4 @@
-// Siembro — pinta el resultado del cálculo
+// Siembro Colombia — pinta el resultado del cálculo
 // Archivo cargado como script clásico: las constantes y funciones quedan globales y las usan los demás archivos.
 
 function calcular(usuario){

@@ -1,4 +1,4 @@
-// Siembro — utilidades de formato y acceso al DOM
+// Siembro Colombia — utilidades de formato y acceso al DOM
 // Archivo cargado como script clásico: las constantes y funciones quedan globales y las usan los demás archivos.
 
 const $=id=>document.getElementById(id);

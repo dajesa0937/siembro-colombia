@@ -1,4 +1,4 @@
-// Siembro — municipios con clima típico y coordenadas
+// Siembro Colombia — municipios con clima típico y coordenadas
 // Archivo cargado como script clásico: las constantes y funciones quedan globales y las usan los demás archivos.
 
 const REG={costa:"Costa Atlántica (Caribe)",antioquia:"Antioquia",andes:"Andes / Eje Cafetero",bogota:"Bogotá y Altiplano Cundiboyacense"};

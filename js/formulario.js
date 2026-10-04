@@ -1,4 +1,4 @@
-// Siembro — pestañas, formulario y lectura de datos del usuario
+// Siembro Colombia — pestañas, formulario y lectura de datos del usuario
 // Archivo cargado como script clásico: las constantes y funciones quedan globales y las usan los demás archivos.
 
 document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>abrirTab(b.dataset.tab));

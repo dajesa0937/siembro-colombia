@@ -1,4 +1,4 @@
-// Siembro — arranque, instalación PWA y datos guardados
+// Siembro Colombia — arranque, instalación PWA y datos guardados
 // Archivo cargado como script clásico: las constantes y funciones quedan globales y las usan los demás archivos.
 
 // ---------- Inicio ----------

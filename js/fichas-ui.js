@@ -1,4 +1,4 @@
-// Siembro — fotos de Wikimedia, dibujo de distancia, fertilización y pestaña Cultivos
+// Siembro Colombia — fotos de Wikimedia, dibujo de distancia, fertilización y pestaña Cultivos
 // Archivo cargado como script clásico: las constantes y funciones quedan globales y las usan los demás archivos.
 
 // ---------- Fotos libres de Wikipedia / Wikimedia Commons ----------
