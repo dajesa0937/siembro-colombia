@@ -4,6 +4,8 @@
 - Campo animado en el encabezado (sol, nubes, plantas que crecen y gotas).
 - Resultado de rentabilidad: ícono animado en el veredicto, cifras que suben contando y barras de aptitud que se llenan.
 - Clima y riego: ícono del tiempo animado (sol, nubes, lluvia, tormenta), gotas sobre las plantas cuando toca regar y barras de lluvia que crecen.
+- Publicación pasa de Netlify a GitHub Pages (gratis, desde GitHub Actions).
+- Corrección: la página ya no se desborda hacia la derecha en el celular.
 - Entrada suave de tarjetas y pestañas; todo se apaga con "reducir movimiento" del sistema.
 
 ## 1.1.0 — 2026-10-04

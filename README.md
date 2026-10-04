@@ -40,7 +40,7 @@ siembro/
 │   └── app.js              Arranque, instalación y datos guardados
 ├── tests/calculos.test.mjs Pruebas de los cálculos
 ├── .github/workflows/pruebas.yml  Pruebas automáticas en GitHub
-└── netlify.toml            Publicación en Netlify (corre las pruebas antes)
+└── netlify.toml            Configuración de Netlify (ya no se usa; ahora se publica en GitHub Pages)
 ```
 
 No usa frameworks ni paso de compilación: son archivos estáticos. Los scripts se cargan en orden en `index.html` (datos y cálculos antes que la interfaz).
@@ -63,9 +63,9 @@ npm test
 
 ## Publicar
 
-### Netlify (automático desde GitHub)
+### GitHub Pages (automático desde GitHub)
 
-El sitio es **https://siembro-colombia.netlify.app** y está conectado a este repositorio. Cada `git push` a `main` hace que Netlify corra `npm test` y, si las pruebas pasan, publique la nueva versión. Si una prueba falla, Netlify no publica y el sitio sigue con la versión anterior.
+El sitio es **https://dajesa0937.github.io/siembro-colombia/**. Cada `git push` a `main` corre `npm test` en GitHub Actions y, si las pruebas pasan, publica la nueva versión. Si una prueba falla, no se publica y el sitio sigue con la versión anterior. Para activarlo una sola vez: en GitHub, **Settings → Pages → Source: GitHub Actions**.
 
 GitHub Actions también corre las pruebas (`.github/workflows/pruebas.yml`), para ver el resultado en cada commit.
 
