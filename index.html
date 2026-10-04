@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2F6B3A">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Siembro">
+<meta name="description" content="Calcule costos de siembra, rentabilidad, clima y riego según municipio, suelo y agua disponible en Colombia.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<title>¿Siembro o no siembro? Rentabilidad, clima y riego</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <h1>¿Siembro o no siembro?</h1>
+  <p>Cuánto cuesta sembrar, cuánto se gana, qué riego gasta menos agua y si su agua alcanza. Con el clima de hoy y una guía para aprender a hacer las cuentas.</p>
+  <div class="pwabar"><button type="button" class="sec" id="instalar" hidden>Instalar en el celular</button><span class="net" id="net"></span></div>
+  <p class="hint" id="iosTip" hidden>En iPhone: toque Compartir en Safari y luego "Agregar a pantalla de inicio".</p>
+</header>
+
+<nav class="tabs" role="tablist" aria-label="Secciones">
+  <button role="tab" aria-selected="true" data-tab="calc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 21V11"/><path d="M12 13c-4 0-6-2-6-6 4 0 6 2 6 6z"/><path d="M12 11c0-4 2-6 6-6 0 4-2 6-6 6z"/><path d="M5 21h14"/></svg>Calcular</button>
+  <button role="tab" aria-selected="false" data-tab="clima"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 15a4 4 0 1 1 .9-7.9A5 5 0 0 1 17.5 8 3.5 3.5 0 0 1 17 15z"/><path d="M8 19l-1 2M12 19l-1 2M16 19l-1 2"/></svg>Clima y riego</button>
+  <button role="tab" aria-selected="false" data-tab="cultivos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-8 9"/></svg>Cultivos</button>
+  <button role="tab" aria-selected="false" data-tab="guia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/><path d="M9 8h6M9 12h6"/></svg>Guía</button>
+</nav>
+
+<section id="tab-calc" role="tabpanel">
+<div class="grid">
+<form class="form" id="f" onsubmit="event.preventDefault();calcular(true)">
+  <fieldset>
+    <legend>Dónde va a sembrar</legend>
+    <label for="dep">Departamento</label>
+    <select id="dep"></select>
+    <label for="mun">Municipio</label>
+    <select id="mun"></select>
+    <div id="custom" hidden>
+      <div class="row3">
+        <div><label for="cAlt">Altura (m)</label><input id="cAlt" type="number" value="500" inputmode="numeric"></div>
+        <div><label for="cT">Temp. °C</label><input id="cT" type="number" value="26" inputmode="decimal"></div>
+        <div><label for="cR">Lluvia mm/año</label><input id="cR" type="number" value="1500" inputmode="numeric"></div>
+      </div>
+      <div class="row2">
+        <div><label for="cD">Meses secos</label><input id="cD" type="number" value="3" min="0" max="12"></div>
+        <div><label for="cReg">Región</label>
+          <select id="cReg"><option value="costa">Costa Atlántica</option><option value="antioquia">Antioquia</option><option value="andes">Andes / Eje Cafetero</option><option value="bogota">Bogotá y Altiplano</option></select></div>
+      </div>
+    </div>
+    <div class="clima" id="clima"></div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Qué quiere sembrar</legend>
+    <label for="cul">Cultivo</label>
+    <select id="cul"></select>
+    <label for="var">Variedad</label>
+    <select id="var"></select>
+    <div id="usoBox" hidden>
+      <label for="uso">Para qué es el pasto</label>
+      <select id="uso"><option value="ceba">Ceba (carne)</option><option value="leche">Leche</option></select>
+    </div>
+    <div class="row2">
+      <div><label for="area">Área (hectáreas)</label><input id="area" type="number" value="1" min="0.1" step="0.1" inputmode="decimal"></div>
+      <div><label for="ph">pH del suelo</label><input id="ph" type="number" placeholder="Si lo sabe" step="0.1" min="3" max="9" inputmode="decimal"></div>
+    </div>
+    <label for="suelo">Tipo de suelo</label>
+    <select id="suelo">
+      <option value="arenoso">Arenoso (suelto, no retiene agua)</option>
+      <option value="franco-arenoso">Franco arenoso</option>
+      <option value="franco" selected>Franco (equilibrado)</option>
+      <option value="franco-arcilloso">Franco arcilloso</option>
+      <option value="arcilloso">Arcilloso (pesado, se encharca)</option>
+    </select>
+  </fieldset>
+
+  <fieldset>
+    <legend>Agua que tiene disponible</legend>
+    <label for="fuente">Fuente de agua</label>
+    <select id="fuente">
+      <option value="lluvia">Solo lluvia, no tengo otra fuente</option>
+      <option value="pozo">Pozo con bomba</option>
+      <option value="quebrada">Quebrada, río o caño</option>
+      <option value="reservorio">Reservorio o jagüey</option>
+      <option value="acueducto">Acueducto veredal</option>
+    </select>
+    <div id="fCaudal" class="row2" hidden>
+      <div><label for="qLs">Caudal (litros/segundo)</label><input id="qLs" type="number" value="2" step="0.1" min="0" inputmode="decimal"></div>
+      <div><label for="horas">Horas de bombeo al día</label><input id="horas" type="number" value="10" min="1" max="24" inputmode="numeric"></div>
+    </div>
+    <div id="fVol" hidden><label for="vol">Agua guardada (m³)</label><input id="vol" type="number" value="2000" min="0" inputmode="numeric"></div>
+    <div id="fAcu" hidden><label for="m3mes">Agua permitida (m³ al mes)</label><input id="m3mes" type="number" value="150" min="0" inputmode="numeric"></div>
+    <p class="hint" id="fuenteHint">¿No sabe el caudal? En la Guía le enseñamos a medirlo con un balde.</p>
+  </fieldset>
+
+  <fieldset>
+    <legend>Cómo lo quiere manejar</legend>
+    <div class="modes">
+      <label class="mode"><input type="radio" name="modo" value="trad" checked><div><strong>Tradicional</strong><span>Depende de la lluvia, sin sistema de riego.</span></div></label>
+      <label class="mode"><input type="radio" name="modo" value="riego"><div><strong>Con riego</strong><span>Sistema de riego que se abre y cierra a mano.</span></div></label>
+      <label class="mode"><input type="radio" name="modo" value="auto"><div><strong>Automatizado</strong><span>Riego con controlador, electroválvulas y sensores de humedad.</span></div></label>
+    </div>
+    <label for="met">Sistema de riego</label>
+    <select id="met"></select>
+  </fieldset>
+
+  <details class="aj">
+    <summary>Ajustar precios y rendimientos</summary>
+    <div class="row2">
+      <div><label for="sP" id="sPl">Precio de venta (COP/kg)</label><input id="sP" type="number" inputmode="numeric"></div>
+      <div><label for="sY" id="sYl">Rendimiento (t/ha)</label><input id="sY" type="number" step="0.1" inputmode="decimal"></div>
+      <div><label for="sE" id="sEl">Establecimiento (COP/ha)</label><input id="sE" type="number" inputmode="numeric"></div>
+      <div><label for="sM" id="sMl">Mantenimiento (COP/ha/año)</label><input id="sM" type="number" inputmode="numeric"></div>
+    </div>
+    <p class="hint">Vienen con valores de referencia. Ponga el precio que le paga su comprador para que el cálculo sea más real.</p>
+  </details>
+
+  <button class="go" type="submit">Calcular</button>
+</form>
+
+<section class="results" id="out" aria-live="polite">
+  <div class="empty">
+    <h2>Elija municipio, cultivo y su fuente de agua</h2>
+    <p>Por ejemplo: cacao en Tierralta, ají en Montería, aguacate Hass en La Ceja o pasto para ceba en Planeta Rica. Le decimos si conviene, cuánto invertir, cuánto ganaría, qué riego ahorra más agua y si su agua alcanza.</p>
+  </div>
+</section>
+</div>
+</section>
+
+<section id="tab-clima" role="tabpanel" hidden>
+  <div class="results" style="max-width:900px">
+    <div class="card">
+      <h2 id="cLugar">Clima</h2>
+      <p class="hint" id="cPara"></p>
+      <div class="pwabar"><button type="button" class="sec" id="miUbic">Usar mi ubicación</button><button type="button" class="sec" id="actClima">Actualizar</button></div>
+    </div>
+    <div id="climaOut"><div class="empty"><h2>Cargando el clima…</h2><p>Necesita señal la primera vez. Después se guarda el último pronóstico para verlo sin conexión.</p></div></div>
+  </div>
+</section>
+
+<section id="tab-cultivos" role="tabpanel" hidden>
+  <div class="results" style="max-width:900px">
+    <div class="card"><h2>Fichas de cultivos</h2><p>Fotos, producción por hectárea, distancia de siembra, semilla, cómo se cultiva, abonos y plagas.</p>
+      <label for="fCul">Cultivo</label><select id="fCul"></select></div>
+    <div id="fichaOut"></div>
+  </div>
+</section>
+
+<section id="tab-guia" role="tabpanel" hidden>
+<div class="guia">
+<details open><summary>Cómo usar la aplicación</summary>
+<ol class="tight">
+<li>En <b>Calcular</b>, elija el departamento y el municipio. La app trae la altura, la temperatura y la lluvia típica del lugar.</li>
+<li>Escoja el cultivo, la variedad, el área y el tipo de suelo. Si tiene análisis de suelo, ponga el pH.</li>
+<li>Diga qué agua tiene: solo lluvia, pozo, quebrada, reservorio o acueducto.</li>
+<li>Elija tradicional, con riego o automatizado. La app le compara los tres de todas formas.</li>
+<li>Toque <b>Calcular</b>. Lea primero el veredicto y luego abra "¿Cómo se calculó?" para entender las cuentas.</li>
+<li>En <b>Clima y riego</b> mire cada mañana si tiene que regar hoy o si viene lluvia.</li>
+</ol></details>
+
+<details><summary>Cómo medir cuánta agua tiene</summary>
+<p><b>Caudal de un pozo, manguera o tubo:</b> tome un balde de 20 litros y mida con el celular cuántos segundos tarda en llenarse.</p>
+<p>Caudal (litros por segundo) = 20 ÷ segundos. Si tarda 10 segundos, tiene 2 L/s.</p>
+<p><b>Caudal de una quebrada pequeña:</b> mida el ancho y la profundidad promedio en metros, y el tiempo que tarda una hoja en recorrer 10 metros. Caudal (L/s) = ancho × profundidad × (10 ÷ segundos) × 0,8 × 1.000.</p>
+<p><b>Agua de un reservorio o jagüey:</b> largo × ancho × profundidad en metros, por 0,7 por las paredes inclinadas. Un jagüey de 20 × 15 × 3 m guarda unos 630 m³.</p>
+<p><b>Lluvia de un techo:</b> cada milímetro de lluvia sobre 1 m² de techo da 1 litro. Un techo de 100 m² con 1.200 mm al año recoge unos 100.000 litros (100 m³).</p>
+<p>Recuerde: 1 m³ son 1.000 litros. Para usar agua de quebrada o pozo profundo necesita concesión de aguas de la corporación autónoma regional.</p>
+</details>
+
+<details><summary>Tipos de suelo según la zona de Colombia</summary>
+<p>Es una guía general: dentro de un mismo municipio cambia de finca a finca. La app le sugiere el suelo típico cuando elige el municipio, pero confírmelo con la prueba del puño o un análisis.</p>
+<div id="zonasGuia"></div>
+</details>
+
+<details><summary>Cómo saber qué tipo de suelo tiene</summary>
+<p><b>Prueba del puño:</b> moje un puñado de tierra y apriételo.</p>
+<ul class="tight">
+<li>Se desmorona y se siente áspero: <b>arenoso</b>. El agua se va rápido; riegue poco y seguido.</li>
+<li>Forma una bola que se rompe al tocarla: <b>franco</b>. Es el mejor para casi todo.</li>
+<li>Forma una cinta larga, pegajosa y brillante: <b>arcilloso</b>. Se encharca; cuidado con aguacate, yuca, papa y ñame.</li>
+</ul>
+<p><b>Prueba del frasco:</b> llene un frasco un tercio con tierra, complete con agua, agite y déjelo un día. Abajo queda la arena, en medio el limo y arriba la arcilla.</p>
+<p>Para el pH y los nutrientes haga un análisis de suelo en un laboratorio (Agrosavia, universidades o laboratorios privados). Cuesta menos que un bulto de fertilizante mal aplicado.</p>
+</details>
+
+<details><summary>Cómo se calcula el agua que gasta un cultivo</summary>
+<p>Las plantas pierden agua por las hojas y el suelo la pierde por el sol y el viento. A eso se le llama <b>evapotranspiración</b> y se mide en milímetros por día.</p>
+<p>1 mm de agua sobre 1 hectárea son 10 m³ (10.000 litros).</p>
+<ol class="tight">
+<li><b>ETo</b>: lo que pierde un pasto de referencia según el clima. En la Costa es de unos 5 mm/día y en Bogotá de unos 3 mm/día. La app la toma del pronóstico.</li>
+<li><b>Kc</b>: cuánto gasta su cultivo comparado con ese pasto. El cacao gasta 1,0, el aguacate 0,8 y el arroz inundado más de 1,1.</li>
+<li><b>Necesidad del cultivo</b> = ETo × Kc. Ejemplo: 5 × 1,0 = 5 mm/día = 50 m³ por hectárea al día.</li>
+<li>A eso se le resta la lluvia que se aprovecha (cerca del 75 al 80 %).</li>
+<li>Lo que falta se divide por la <b>eficiencia</b> del riego. Con goteo (90 %) hay que poner 5,6 mm; con inundación (40 %) hay que poner 12,5 mm.</li>
+</ol>
+<p>Por eso el sistema de riego cambia tanto el gasto de agua: con el mismo cultivo, la inundación puede gastar más del doble que el goteo.</p>
+</details>
+
+<details><summary>Sistemas de riego: cuál gasta menos agua</summary>
+<div class="scroll"><table><thead><tr><th>Sistema</th><th>Eficiencia</th><th>Costo aprox./ha</th><th>Sirve para</th></tr></thead><tbody>
+<tr><td>Goteo</td><td>90 %</td><td>$9,5 M</td><td>Frutales, cacao, café, ají, maracuyá</td></tr>
+<tr><td>Cinta de goteo</td><td>88 %</td><td>$5,5 M</td><td>Hortalizas, maíz, sorgo, yuca, ñame</td></tr>
+<tr><td>Microaspersión</td><td>85 %</td><td>$8 M</td><td>Aguacate, limón, plátano</td></tr>
+<tr><td>Aspersión</td><td>75 %</td><td>$6,5 M</td><td>Pastos, papa, fríjol, maíz</td></tr>
+<tr><td>Inundación intermitente</td><td>55 %</td><td>$2,8 M</td><td>Arroz</td></tr>
+<tr><td>Gravedad por surcos</td><td>50 %</td><td>$1,5 M</td><td>Cultivos en surco, pastos con buena pendiente</td></tr>
+<tr><td>Inundación</td><td>40 %</td><td>$2,5 M</td><td>Arroz</td></tr>
+</tbody></table></div>
+<p>Los sistemas baratos se pagan con agua: si el agua es poca, el goteo le deja sembrar más hectáreas con la misma agua.</p>
+<div class="fotos" id="fotosRiego"></div>
+</details>
+
+<details><summary>Diez formas de ahorrar agua en la finca</summary>
+<ol class="tight">
+<li>Riegue temprano en la mañana o al final de la tarde, no al mediodía.</li>
+<li>Mire el pronóstico: si vienen más de 5 mm de lluvia en 24 horas, no riegue.</li>
+<li>Cubra el suelo con hojarasca, cascarilla o tamo (mulch): reduce la evaporación hasta a la mitad.</li>
+<li>Prefiera goteo o cinta donde se pueda; deje la inundación y los surcos para cuando no hay otra opción.</li>
+<li>Revise fugas, mangueras rotas y goteros tapados cada semana. Lave los filtros.</li>
+<li>Agregue materia orgánica: un suelo con más humus guarda más agua.</li>
+<li>Siembre barreras rompevientos; el viento seca el suelo y desvía la aspersión.</li>
+<li>Recoja agua lluvia de techos y construya reservorios para el verano.</li>
+<li>Use sensores de humedad o un tensiómetro: riegue cuando el suelo lo pide, no por costumbre.</li>
+<li>En arroz, nivele el lote y use inundación intermitente (secas y mojes): ahorra cerca de un tercio del agua.</li>
+</ol>
+</details>
+
+<details><summary>Para ganaderos: pastos, carga animal y comida para el verano</summary>
+<p><b>Cuánto come una vaca:</b> una Unidad de Gran Ganado (UGG) es un animal de 450 kg. Come cerca de 10 kg de materia seca al día, unos 3.650 kg al año.</p>
+<p><b>Carga animal:</b> si un pasto produce 18 t de materia seca por hectárea al año y los animales aprovechan el 60 %, alcanza para 18.000 × 0,6 ÷ 3.650 = unas 3 UGG por hectárea. En pastos tradicionales sin manejo se llega apenas a 0,8–1 UGG/ha.</p>
+<p><b>Rotación de potreros:</b> divida en potreros con cerca eléctrica y dé de 30 a 40 días de descanso en lluvias. Produce más pasto que dejar el ganado suelto en un solo potrero.</p>
+<p><b>Comida para el verano:</b> en la Costa el pasto casi deja de crecer de diciembre a marzo. Siembre maíz forrajero o sorgo en lluvias y ensílelo. Una vaca come de 15 a 20 kg de silo al día.</p>
+<p><b>Sorgo y millo:</b> aguantan más la sequía y gastan menos agua que el maíz. El sorgo forrajero rebrota después del corte.</p>
+<p><b>Agua para el ganado:</b> cada animal toma de 40 a 60 litros al día en clima cálido. Cuente esa agua aparte de la de riego.</p>
+</details>
+
+<details><summary>Cuándo es mejor no sembrar</summary>
+<ul class="tight">
+<li>Cuando el clima no es el del cultivo: ningún riego arregla la altura ni el frío o el calor.</li>
+<li>Cuando no tiene a quién venderle. Consiga el comprador o el contrato antes de sembrar, sobre todo en ají tabasco, papa y maíz.</li>
+<li>Cuando el agua no alcanza para el verano y no hay plata para un reservorio.</li>
+<li>Cuando el margen es menor al 15 %: una mala cosecha o un mal precio se lleva la ganancia.</li>
+<li>Cuando no puede aguantar sin ingresos hasta que el cultivo produzca (3 a 6 años en aguacate y cacao).</li>
+</ul>
+</details>
+
+<details><summary>Dónde pedir ayuda</summary>
+<ul class="tight">
+<li><b>UMATA o Secretaría de Agricultura</b> de su municipio: asistencia técnica gratuita o de bajo costo.</li>
+<li><b>Agrosavia</b>: variedades, semillas mejoradas y análisis de suelo.</li>
+<li><b>ICA</b>: registro de viveros, predios y semillas certificadas.</li>
+<li><b>Gremios</b>: Fedecacao, Federación Nacional de Cafeteros, Fenalce (maíz, sorgo, fríjol), Fedearroz, Fedegán, Asohofrucol (frutas) y Fedepapa.</li>
+<li><b>Crédito</b>: Banco Agrario y las líneas de Finagro para pequeños productores, incluidas líneas para riego.</li>
+<li><b>Corporación autónoma regional</b> (CVS en Córdoba, Corantioquia y Cornare en Antioquia, CAR en Cundinamarca): permisos para usar agua.</li>
+</ul>
+</details>
+</div>
+</section>
+
+<p class="foot">Valores de referencia aproximados para Colombia en 2026, a precio de finca. Los precios agrícolas cambian mucho según la temporada y el comprador. El pronóstico del clima viene de Open-Meteo. Use esta herramienta como primer filtro y confirme con un agrónomo, la UMATA o el gremio antes de invertir.</p>
+</div>
+
+<!-- El orden importa: datos y cálculos antes que la interfaz -->
+<script src="js/utilidades.js"></script>
+<script src="js/datos/municipios.js"></script>
+<script src="js/datos/cultivos.js"></script>
+<script src="js/datos/fichas.js"></script>
+<script src="js/calculos.js"></script>
+<script src="js/formulario.js"></script>
+<script src="js/resultados.js"></script>
+<script src="js/fichas-ui.js"></script>
+<script src="js/clima.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
