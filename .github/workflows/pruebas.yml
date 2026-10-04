@@ -1,0 +1,18 @@
+# Corre las pruebas de los cálculos en cada push y pull request.
+# La publicación la hace Netlify, conectado a este repositorio.
+name: Pruebas
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  pruebas:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm test
