@@ -1,0 +1,89 @@
+/* Siembro Colombia — animaciones e ilustraciones. Todo en CSS/SVG, sin librerías, y se apaga con "reducir movimiento". */
+
+/* ---------- Encabezado con campo animado ---------- */
+header.top{position:relative;overflow:hidden}
+.hero{display:block;width:100%;height:auto;max-height:230px;margin:14px 0 4px;border-radius:14px;background:linear-gradient(#CFE6F2 0%,#EAF4EA 62%,#D8E8C8 100%)}
+.hero .sol{transform-origin:600px 56px}
+.hero .loma1{fill:#8DBF7B}.hero .loma2{fill:#6FA865}.hero .surco{stroke:#4C8A47;stroke-width:3;fill:none;stroke-linecap:round}
+.hero .nube{fill:#fff;opacity:.92}
+.hero .tallo{stroke:#2F6B3A;stroke-width:3.5;fill:none;stroke-linecap:round}
+.hero .hoja{fill:#3E8B49}
+.hero .fruto{fill:#B97B16}
+.hero .gota{fill:#1F6A8A;opacity:.85}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .hero{background:linear-gradient(#1B2C3A 0%,#1F3326 62%,#243A22 100%)}:root:not([data-theme="light"]) .hero .nube{fill:#CFE0EA;opacity:.35}:root:not([data-theme="light"]) .hero .loma1{fill:#35603A}:root:not([data-theme="light"]) .hero .loma2{fill:#2A4C2E}}
+:root[data-theme="dark"] .hero{background:linear-gradient(#1B2C3A 0%,#1F3326 62%,#243A22 100%)}
+:root[data-theme="dark"] .hero .nube{fill:#CFE0EA;opacity:.35}
+
+/* ---------- Estado vacío ---------- */
+.empty .brote{display:block;width:84px;height:84px;margin:0 0 8px}
+
+/* ---------- Resultado ---------- */
+.verdict{position:relative}
+.verdict .ico{position:absolute;right:16px;top:16px;width:64px;height:64px}
+.verdict .stamp{padding-right:76px}
+.ico path,.ico circle{fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- Clima e icono del tiempo ---------- */
+.ahora .tiempo{width:92px;height:92px;flex:none}
+.tiempo .sol-c{fill:#E8A91F}.tiempo .rayos{stroke:#E8A91F;stroke-width:4;stroke-linecap:round;transform-origin:50px 50px}
+.tiempo .nube-c{fill:#B9C7D0}.tiempo .nube-o{fill:#8FA1AD}
+.tiempo .lluvia{stroke:var(--agua);stroke-width:4;stroke-linecap:round}
+.tiempo .rayo{fill:#E8A91F}
+.riegoAnim{display:block;width:100%;height:64px;margin:6px 0 2px}
+.riegoAnim .gt{fill:var(--agua)}
+.riegoAnim .suelo{fill:var(--tierra);opacity:.35}
+.riegoAnim .planta{stroke:var(--leaf);stroke-width:3;fill:none;stroke-linecap:round}
+
+@media (prefers-reduced-motion:no-preference){
+  /* Encabezado */
+  .hero .sol{animation:girar 40s linear infinite}
+  .hero .nube.n1{animation:nube 38s linear infinite}.hero .nube.n2{animation:nube 54s linear -20s infinite}.hero .nube.n3{animation:nube 46s linear -8s infinite}
+  .hero .planta{transform-box:fill-box;transform-origin:50% 100%;animation:crece 1.4s cubic-bezier(.2,.8,.3,1.2) var(--d,0s) both}
+  .hero .planta .mece{transform-box:fill-box;transform-origin:50% 100%;animation:mece 4s ease-in-out 1.6s infinite}
+  .hero .gota{animation:cae 2.6s ease-in var(--d,0s) infinite}
+  .empty .brote .m{transform-box:fill-box;transform-origin:50% 100%;animation:mece 3.5s ease-in-out infinite}
+  /* Entrada de tarjetas del resultado */
+  #out .card,#out .verdict,#climaOut .card{animation:sube .5s ease-out both}
+  #out>*:nth-child(2){animation-delay:.08s}#out>*:nth-child(3){animation-delay:.16s}#out>*:nth-child(4){animation-delay:.24s}#out>*:nth-child(n+5){animation-delay:.3s}
+  #climaOut>*:nth-child(2){animation-delay:.1s}#climaOut>*:nth-child(3){animation-delay:.2s}
+  /* Icono del veredicto */
+  .verdict.ok .ico .tr{stroke-dasharray:60;stroke-dashoffset:60;animation:trazo .7s ease-out .25s forwards}
+  .verdict.ok .ico .hj{transform-box:fill-box;transform-origin:50% 100%;animation:crece .9s cubic-bezier(.2,.8,.3,1.3) .3s both}
+  .verdict.mid .ico{animation:latido 1.6s ease-in-out .4s 3}
+  .verdict.no .ico{animation:tiembla .6s ease-in-out .35s 1}
+  /* Barras de aptitud */
+  .bar i{transform-origin:left;animation:barra .9s cubic-bezier(.2,.7,.2,1) .35s both}
+  /* Tiempo */
+  .tiempo .rayos{animation:girar 14s linear infinite}
+  .tiempo .nube-g{animation:flota 5s ease-in-out infinite}
+  .tiempo .lluvia{stroke-dasharray:6 8;animation:llueve .8s linear infinite}
+  .tiempo .rayo{animation:destello 3s ease-in-out infinite}
+  .riegoAnim .gt{animation:cae2 1.3s ease-in var(--d,0s) infinite}
+  .riegoAnim .planta{transform-box:fill-box;transform-origin:50% 100%;animation:mece 3s ease-in-out infinite}
+  .gota i{transform-origin:bottom;animation:barraV .8s cubic-bezier(.2,.7,.2,1) .2s both}
+  .dia{animation:sube .4s ease-out both}.dia:nth-child(2){animation-delay:.05s}.dia:nth-child(3){animation-delay:.1s}.dia:nth-child(4){animation-delay:.15s}.dia:nth-child(5){animation-delay:.2s}.dia:nth-child(6){animation-delay:.25s}.dia:nth-child(7){animation-delay:.3s}
+  /* Pestañas y botones */
+  section[role=tabpanel]:not([hidden]){animation:sube .35s ease-out}
+  button.go,button.sec{transition:transform .12s,box-shadow .12s}
+  button.go:active,button.sec:active{transform:scale(.97)}
+  button.go:hover{box-shadow:0 4px 14px rgba(47,107,58,.35)}
+  nav.tabs button svg{transition:transform .2s}
+  nav.tabs button[aria-selected="true"] svg{animation:salto .45s ease-out}
+  .mode{transition:background .2s,border-color .2s}
+  @keyframes girar{to{transform:rotate(360deg)}}
+  @keyframes nube{from{transform:translateX(-140px)}to{transform:translateX(900px)}}
+  @keyframes crece{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+  @keyframes mece{0%,100%{transform:rotate(-2.5deg)}50%{transform:rotate(2.5deg)}}
+  @keyframes cae{0%{transform:translateY(-6px);opacity:0}15%{opacity:.9}100%{transform:translateY(46px);opacity:0}}
+  @keyframes cae2{0%{transform:translateY(-14px);opacity:0}20%{opacity:1}100%{transform:translateY(34px);opacity:0}}
+  @keyframes sube{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @keyframes trazo{to{stroke-dashoffset:0}}
+  @keyframes latido{0%,100%{transform:scale(1)}50%{transform:scale(1.14)}}
+  @keyframes tiembla{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+  @keyframes barra{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+  @keyframes barraV{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+  @keyframes flota{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+  @keyframes llueve{to{stroke-dashoffset:-14}}
+  @keyframes destello{0%,86%,100%{opacity:0}90%,96%{opacity:1}}
+  @keyframes salto{0%{transform:translateY(0)}40%{transform:translateY(-6px)}100%{transform:translateY(0)}}
+}

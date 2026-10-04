@@ -1,10 +1,10 @@
 // Siembro Colombia — service worker: la app funciona sin internet en el campo.
 // IMPORTANTE: suba VERSION cada vez que publique cambios para que los celulares se actualicen.
-const VERSION = 'siembrocolombia-v5';
+const VERSION = 'siembrocolombia-v6';
 const SHELL = [
-  './', './index.html', './manifest.webmanifest', './css/estilos.css',
+  './', './index.html', './manifest.webmanifest', './css/estilos.css', './css/animaciones.css',
   './js/utilidades.js', './js/datos/municipios.js', './js/datos/cultivos.js', './js/datos/fichas.js',
-  './js/calculos.js', './js/formulario.js', './js/resultados.js', './js/fichas-ui.js', './js/clima.js', './js/app.js',
+  './js/calculos.js', './js/formulario.js', './js/resultados.js', './js/fichas-ui.js', './js/clima.js', './js/animaciones.js', './js/app.js',
   './icons/icon-192.png', './icons/icon-512.png', './icons/maskable-512.png', './icons/apple-touch-icon.png'
 ];
 

@@ -88,6 +88,7 @@ function calcular(usuario){
     <p class="hint">Calculado con precios de referencia, su misma área y su agua disponible. Toque uno para ver el detalle.</p></div>`;
 
   $("out").innerHTML=h;cargarFotos($("out"));guardar();climaCargado=null;
+  if(typeof animarResultado==="function")animarResultado($("out"));
   if(usuario&&innerWidth<900)$("out").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
 }
 function probar(k){$("cul").value=k;llenarCultivo();calcular(true);}

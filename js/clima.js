@@ -51,6 +51,7 @@ function pintarClima(j,guardado){
    ${dias.map((x,i)=>`<div class="dia"><b>${i===0?"Hoy":fechaCorta(x.t)}</b>${num(x.max,0)}° / ${num(x.min,0)}°<div class="gota" aria-hidden="true"><i style="height:${Math.max(3,x.ll/maxLl*46)}px"></i></div>${num(x.ll,1)} mm<br><small>${x.pr!=null?x.pr+" % lluvia":""}</small><br><small>${x.neta>.5?"Riego "+num(x.m3,1)+" m³":"Sin riego"}</small></div>`).join("")}
   </div><p class="hint">Barras azules: lluvia esperada en milímetros. Pronóstico de Open-Meteo.</p></div>`;
   $("climaOut").innerHTML=h;
+  if(typeof animarClima==="function")animarClima($("climaOut"),cur.weather_code);
 }
 $("actClima").onclick=()=>cargarClima(true);
 $("miUbic").onclick=()=>{if(!navigator.geolocation){alert("Su celular no permite compartir la ubicación.");return;}
