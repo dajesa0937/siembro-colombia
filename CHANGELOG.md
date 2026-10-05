@@ -1,5 +1,12 @@
 # Cambios
 
+## 1.7.1 — 2026-10-05
+- Calculadora, pastos: ya no dice "No lo siembre, pierde dinero" cuando el pasto deja ganancia cada año. Antes lo decía si la inversión no se recuperaba en 8 años, aunque el pasto durara mucho más. Ahora los pastos se evalúan a 10 años.
+- Veredictos más claros: "pierde dinero" solo si en plena producción gasta más de lo que vende; "Gana casi nada" si deja menos del 5 % anual de lo invertido (menos que un CDT); "Gana poco: la inversión demora en volver" si gana pero no recupera lo invertido.
+- Se corrigió que los pastos de leche con recuperación de más de 6 años salieran como "Sí, es rentable": ahora salen como "Rentabilidad baja".
+- Resultado de pastos: nueva línea "Si ya tiene el pasto sembrado" con la ganancia por año y por hectárea sin contar la siembra.
+- Pruebas nuevas que revisan todos los municipios, en ceba y leche, con y sin riego, para que el veredicto no contradiga las cuentas.
+
 ## 1.7.0 — 2026-10-05
 - Nuevo catálogo de semillas de pasto de clima cálido (SOESP / Durespo) en `js/datos/pastos.js`: 8 variedades (Brachiaria decumbens Basilisk, humidicola Comum y Llanero, brizantha Marandú y Xaraés, ruziziensis Ruzi, Panicum Tanzania y Mombasa) con altura, lluvia mínima, suelo ácido, encharcamiento, sequía, heno, ensilaje, proteína, forraje por hectárea, días a pastoreo y semilla por hectárea.
 - Pantalla Semillas (cultivo "Pastos de clima cálido"): guía que ordena las variedades según su lugar, para qué es el pasto, tipo y fertilidad del suelo; calcula los kilos y el costo de semilla para su área según el valor cultural de la bolsa, y trae consejos de siembra del catálogo.

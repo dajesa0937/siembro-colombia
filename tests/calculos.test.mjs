@@ -268,3 +268,33 @@ test('recomendarPastos: suelo ácido favorece Brachiaria y castiga Panicum; heno
   const enc = recomendarPastos(PASTOS, L, { encharca: true });
   assert.equal(enc[0].p.k, 'humidicola');
 });
+
+test('pastos: se evalúan a 10 años y nunca dice "pierde dinero" si cada año deja ganancia', () => {
+  for (const k of ['pastoT', 'pastoF']) {
+    assert.equal(C[k].ramp.length, 10);
+    for (const uso of ['ceba', 'leche']) for (const modo of ['trad', 'riego']) for (const m of MUN) {
+      const L = lugar(m[1]), c = C[k], A = agua(c, L, 1), apt = aptitud(c, L, 'franco', null, modo);
+      const F = finanzas(c, L, 1, modo, A.mejor, A, { p: uso === 'leche' ? c.pLeche : c.pCarne, y: c.y, est: c.est, man: c.man }, uso);
+      const v = veredicto(apt, F, c, { modo, haMax: 99, ha: 1, met: A.mejor });
+      if (v.t === 'No lo siembre, pierde dinero') assert.ok(F.anual <= 0, `${k} ${uso} ${modo} ${m[1]}: dice pierde dinero pero gana ${F.anual} al año`);
+      if (v.k === 'ok') assert.ok(F.payback !== null && F.payback <= 6 && F.margen >= 0.15, `${k} ${uso} ${modo} ${m[1]}: "sí" sin recuperar la inversión en 6 años`);
+    }
+  }
+});
+
+test('veredicto: ganancia chiquita frente a la inversión no es "rentable"; ganancia que tarda en volver es "gana poco"', () => {
+  const c = C.pastoT, L = lugar('Montería'), A = agua(c, L, 1), apt = aptitud(c, L, 'franco', null, 'trad');
+  const F0 = finanzas(c, L, 1, 'trad', A.mejor, A, { p: c.pCarne, y: c.y, est: c.est, man: c.man }, 'ceba');
+  const W = { modo: 'trad', haMax: 9, ha: 1, met: A.mejor };
+  assert.ok(F0.anual > 0 && F0.acum <= 0);
+  assert.equal(veredicto(apt, F0, c, W).k, 'mid');
+  const casiNada = { ...F0, anual: F0.inversion * 0.02 };
+  assert.equal(veredicto(apt, casiNada, c, W).t, 'No lo siembre: gana casi nada');
+  const pierde = { ...F0, anual: -1 };
+  assert.equal(veredicto(apt, pierde, c, W).t, 'No lo siembre, pierde dinero');
+});
+
+test('pasto de clima cálido con riego en una zona húmeda: no conviene (cuesta más de lo que da)', () => {
+  const { v } = evaluar('pastoT', 'Tierralta', { modo: 'riego' });
+  assert.notEqual(v.k, 'ok');
+});
