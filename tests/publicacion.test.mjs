@@ -70,3 +70,17 @@ test('el flujo de GitHub publica todas las carpetas y archivos que usa la app (s
   const usados = new Set([...shell.map(f => f.split('/')[0]), 'index.html', 'sw.js', 'manifest.webmanifest']);
   for (const u of usados) assert.ok(copiados.includes(u), `el flujo no copia "${u}" a _site`);
 });
+
+test('cada pantalla de la app (VISTAS) tiene su sección en index.html y todos los data-ir de los archivos JS llevan a una de ellas', () => {
+  const vistas = [...leer('js/formulario.js').match(/const VISTAS=\{([\s\S]*?)\n\};/)[1].matchAll(/(?:^|[,{\s])([a-z]+):\{t:/g)].map(m => m[1]);
+  assert.ok(vistas.length >= 14, 'se esperaban al menos 14 pantallas, hay ' + vistas.length);
+  for (const v of vistas) assert.ok(html.includes(`id="tab-${v}"`), `falta la sección tab-${v}`);
+  const js = ['js/resultados.js', 'js/pantallas.js', 'js/inicio.js'].map(leer).join('\n');
+  for (const [, d] of js.matchAll(/data-ir="([a-z]+)"/g)) assert.ok(vistas.includes(d), `data-ir="${d}" en un archivo JS no es una pantalla`);
+  for (const t of ['inicio', 'cultivos', 'ganaderia', 'finanzas', 'mas']) assert.ok(html.includes(`data-tab="${t}"`), `falta el botón ${t} en la barra inferior`);
+});
+
+test('pantallas.js se carga después de inicio.js y está en el service worker', () => {
+  assert.ok(html.indexOf('js/pantallas.js') > html.indexOf('js/inicio.js'));
+  assert.ok(shell.includes('js/pantallas.js'));
+});

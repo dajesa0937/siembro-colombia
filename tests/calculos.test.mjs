@@ -6,10 +6,10 @@ import vm from 'node:vm';
 
 const archivos = ['js/utilidades.js', 'js/datos/municipios.js', 'js/datos/cultivos.js', 'js/datos/fichas.js', 'js/calculos.js'];
 const codigo = archivos.map(f => readFileSync(new URL('../' + f, import.meta.url), 'utf8')).join('\n') +
-  '\nthis.api={MUN,C,METODOS,FICHA,ZONAS,ZMUN,aptitud,agua,haPosibles,finanzas,veredicto,topCultivos};';
+  '\nthis.api={MUN,C,METODOS,FICHA,ZONAS,ZMUN,aptitud,agua,haPosibles,finanzas,veredicto,topCultivos,MESES,lluviaMensual,calendarioSiembra,rangoMeses,frecuenciaRiego,dosisAbono,desgloseCostos,rotacion,resumenClimatico,periodoMeses,mesesAproximados,balanceMes,indiceForraje,recomendacionesPeriodo,recomendacionesPronostico};';
 const ctx = vm.createContext({ Intl, Math, Number, Object, Array, JSON });
 vm.runInContext(codigo, ctx);
-const { MUN, C, METODOS, FICHA, ZONAS, ZMUN, aptitud, agua, haPosibles, finanzas, veredicto, topCultivos } = ctx.api;
+const { MUN, C, METODOS, FICHA, ZONAS, ZMUN, aptitud, agua, haPosibles, finanzas, veredicto, topCultivos, MESES, lluviaMensual, calendarioSiembra, rangoMeses, frecuenciaRiego, dosisAbono, desgloseCostos, rotacion, resumenClimatico, periodoMeses, mesesAproximados, balanceMes, indiceForraje, recomendacionesPeriodo, recomendacionesPronostico } = ctx.api;
 
 const lugar = nombre => { const m = MUN.find(x => x[1] === nombre); return { dep: m[0], mun: m[1], reg: m[2], alt: m[3], t: m[4], r: m[5], dry: m[6], lat: m[7], lon: m[8] }; };
 const base = c => ({ p: c.tipo === 'pasto' ? c.pCarne : c.p, y: c.y, est: c.est, man: c.man });
@@ -81,4 +81,152 @@ test('topCultivos: el grupo de pastos solo trae pastos y forrajes', () => {
 
 test('cada cultivo tiene títulos de Wikipedia para su foto (miniaturas del Inicio y fichas)', () => {
   for (const k of Object.keys(C)) assert.ok(Array.isArray(FICHA[k].w) && FICHA[k].w.length > 0, `${k} sin títulos de foto`);
+});
+
+test('el desglose de costos suma exactamente los costos de cada año (cultivos, pastos, cada manejo)', () => {
+  for (const k of Object.keys(C)) for (const modo of ['trad', 'riego', 'auto']) {
+    const { F } = evaluar(k, 'Montería', { modo, uso: k === 'pasto_leche' ? 'leche' : 'ceba' });
+    for (const f of F.filas) {
+      const suma = Object.values(f.c).reduce((a, b) => a + b, 0);
+      assert.ok(Math.abs(suma - f.cos) < 1, `${k} ${modo} año ${f.a}: ${suma} != ${f.cos}`);
+    }
+    const d = desgloseCostos(F.filas[F.filas.length - 1]);
+    assert.ok(Math.abs(d.reduce((a, x) => a + x.pct, 0) - 1) < 1e-9);
+  }
+});
+
+test('el desglose también suma en ganadería de leche', () => {
+  const pasto = Object.keys(C).find(k => C[k].tipo === 'pasto');
+  const { F } = evaluar(pasto, 'Montería', { uso: 'leche' });
+  for (const f of F.filas) assert.ok(Math.abs(Object.values(f.c).reduce((a, b) => a + b, 0) - f.cos) < 1);
+});
+
+test('la lluvia de los 12 meses suma la lluvia anual del lugar', () => {
+  for (const mun of ['Montería', 'Bogotá', 'La Ceja', 'Pereira']) {
+    const L = lugar(mun), mm = lluviaMensual(L);
+    assert.equal(mm.length, 12);
+    assert.ok(Math.abs(mm.reduce((a, b) => a + b, 0) - L.r) < 1e-6);
+  }
+});
+
+test('rangoMeses junta meses seguidos y cruza el cambio de año', () => {
+  assert.equal(rangoMeses([3, 4, 5]), 'abril a junio');
+  assert.equal(rangoMeses([11, 0, 1]), 'diciembre a febrero');
+  assert.equal(rangoMeses([0, 10]), 'enero y noviembre');
+  assert.equal(rangoMeses([]), '');
+});
+
+test('calendario de siembra: maíz en la costa se siembra con las lluvias, no en la sequía', () => {
+  const r = calendarioSiembra(C.maiz, lugar('Montería'), false);
+  assert.equal(r.meses.length, 12);
+  assert.ok(r.ideal && r.mejores.length > 0);
+  assert.ok(r.mejores.every(m => m >= 3 && m <= 9), 'los meses ideales caen en lluvias: ' + r.mejores);
+  assert.equal(r.meses[0], 0, 'enero (verano fuerte) no es ideal sin riego');
+});
+
+test('calendario: donde el clima no sirve, ningún mes es recomendado ni con riego', () => {
+  const r = calendarioSiembra(C.hass, lugar('Montería'), true);
+  assert.ok(r.climaNo);
+  assert.ok(r.meses.every(v => v === 0));
+});
+
+test('calendario: con riego hay más meses posibles que sin riego', () => {
+  const L = lugar('Santa Marta');
+  const sin = calendarioSiembra(C.maiz, L, false).meses.filter(v => v > 0).length;
+  const con = calendarioSiembra(C.maiz, L, true).meses.filter(v => v > 0).length;
+  assert.ok(con >= sin);
+});
+
+test('frecuencia de riego: el suelo arenoso se riega más seguido que el arcilloso y el goteo casi a diario', () => {
+  const L = lugar('Montería');
+  const a = frecuenciaRiego(C.maiz, L, 'arenoso', 'aspersion'), b = frecuenciaRiego(C.maiz, L, 'arcilloso', 'aspersion');
+  assert.ok(a.dias <= b.dias && a.dias >= 1);
+  const g = frecuenciaRiego(C.cacao, L, 'franco', 'goteo');
+  assert.ok(g.dias <= 2);
+  assert.ok(g.bruto > g.neto);
+});
+
+test('dosis de abono: bultos de 50 kg desde nutrientes (urea 46 % N, DAP 46 % P, KCl 60 % K)', () => {
+  const d = dosisAbono('maiz', 2);
+  assert.ok(Math.abs(d.urea - d.N / .46 / 50 * 2) < 1e-9);
+  assert.ok(Math.abs(d.dap - d.P / .46 / 50 * 2) < 1e-9);
+  assert.ok(Math.abs(d.kcl - d.K / .6 / 50 * 2) < 1e-9);
+  for (const k of Object.keys(C)) assert.ok(dosisAbono(k), `sin dosis de ${k}`);
+});
+
+test('rotación de potreros: más descanso donde hay meses secos o frío, y los potreros alcanzan para el descanso', () => {
+  const calido = rotacion(lugar('Tierralta')), seco = rotacion(lugar('Valledupar')), frio = rotacion(lugar('Bogotá'));
+  assert.ok(seco.descanso > calido.descanso);
+  assert.ok(frio.descanso > calido.descanso);
+  for (const r of [calido, seco, frio]) {
+    assert.ok(r.rango[0] < r.descanso && r.descanso < r.rango[1]);
+    assert.ok((r.potreros - 1) * r.ocup >= r.descanso, 'con esos potreros el pasto descansa lo suficiente');
+  }
+});
+
+// Datos diarios inventados: 3 años, llueve 5 mm/día en abril y mayo, 0,5 mm el resto, 28 °C / 20 °C
+function diasFalsos() {
+  const time = [], ll = [], tmax = [], tmin = [], et0 = [];
+  for (const y of [2022, 2023, 2024]) for (let m = 0; m < 12; m++) {
+    const n = new Date(y, m + 1, 0).getDate();
+    for (let d = 1; d <= n; d++) { time.push(`${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`); ll.push(m === 3 || m === 4 ? 5 : .5); tmax.push(28); tmin.push(20); et0.push(4); }
+  }
+  return { time, ll, tmax, tmin, et0 };
+}
+
+test('resumenClimatico: promedia los años por mes y calcula lluvia, temperatura y evaporación', () => {
+  const d = diasFalsos(), r = resumenClimatico(d.time, d.ll, d.tmax, d.tmin, d.et0);
+  assert.equal(r.length, 12);
+  assert.ok(Math.abs(r[3].mm - 150) < 1e-9, 'abril: 30 días × 5 mm');
+  assert.ok(Math.abs(r[0].mm - 15.5) < 1e-9, 'enero: 31 días × 0,5 mm');
+  assert.equal(r[3].min, r[3].max);
+  assert.equal(r[0].anios, 3);
+  assert.equal(r[0].t, 24);
+  assert.equal(r[0].et0, 4);
+});
+
+test('resumenClimatico: ignora los meses incompletos', () => {
+  const d = diasFalsos(), n = d.time.length - 10;
+  const r = resumenClimatico(d.time.slice(0, n), d.ll.slice(0, n), d.tmax.slice(0, n), d.tmin.slice(0, n), d.et0.slice(0, n));
+  assert.equal(r[11].anios, 2, 'diciembre de 2024 está incompleto');
+});
+
+test('periodoMeses da la vuelta al año', () => {
+  const m = [...Array(12).keys()].map(i => ({ m: i }));
+  assert.equal(JSON.stringify(periodoMeses(m, 10, 4).map(x => x.m)), '[10,11,0,1]');
+});
+
+test('balanceMes e indiceForraje: sin lluvia falta agua; con mucha lluvia sobra', () => {
+  const seco = { m: 0, mm: 10, et0: 4, t: 25 }, humedo = { m: 4, mm: 400, et0: 4, t: 25 };
+  assert.ok(balanceMes(C.maiz, seco).falta > 50 && balanceMes(C.maiz, seco).sobra === 0);
+  assert.ok(balanceMes(C.maiz, humedo).falta === 0 && balanceMes(C.maiz, humedo).sobra > 0);
+  assert.ok(indiceForraje(seco) < .5 && indiceForraje(humedo) > 1);
+});
+
+test('mesesAproximados da 12 meses que suman la lluvia anual', () => {
+  const L = lugar('Montería'), m = mesesAproximados(L);
+  assert.equal(m.length, 12);
+  assert.ok(Math.abs(m.reduce((s, x) => s + x.mm, 0) - L.r) < 1e-6);
+});
+
+test('recomendaciones por período: avisa de riego y de pasto en los meses secos, y no inventa problemas en los húmedos', () => {
+  const d = diasFalsos(), meses = resumenClimatico(d.time, d.ll, d.tmax, d.tmin, d.et0);
+  const sec = recomendacionesPeriodo(periodoMeses(meses, 0, 3), C.maiz);
+  assert.ok(sec.agri.some(x => x.n === 'aviso' && /riego/i.test(x.t)));
+  assert.ok(sec.gan.some(x => x.n === 'aviso' && /silo|heno/i.test(x.t)));
+  const hum = recomendacionesPeriodo([{ m: 3, mm: 150, et0: 3, t: 22, min: 100, max: 200 }, { m: 4, mm: 150, et0: 3, t: 22, min: 100, max: 200 }], C.maiz);
+  assert.ok(hum.agri.some(x => x.n === 'ok'));
+  assert.ok(!hum.gan.some(x => /Guarde silo/.test(x.t)));
+});
+
+test('recomendaciones del pronóstico: lluvia fuerte = no abonar; días secos = ventana; calor = sombra para el ganado', () => {
+  const lluvia = recomendacionesPronostico([{ ll: 10, max: 28 }, { ll: 8, max: 27 }, { ll: 5, max: 27 }, { ll: 0, max: 28 }]);
+  assert.ok(lluvia.agri.some(x => x.n === 'no' && /abone/i.test(x.t)));
+  const secos = recomendacionesPronostico([...Array(7)].map(() => ({ ll: 0, max: 30 })));
+  assert.ok(secos.agri.some(x => /días seguidos/.test(x.t)));
+  assert.ok(secos.agri.some(x => /solo se esperan/.test(x.t)));
+  const calor = recomendacionesPronostico([{ ll: 0, max: 35 }, { ll: 0, max: 36 }, { ll: 2, max: 30 }]);
+  assert.ok(calor.gan.some(x => /sombra/i.test(x.t)));
+  const nada = recomendacionesPronostico([{ ll: 3, max: 28 }, { ll: 3, max: 28 }]);
+  assert.ok(nada.agri.length > 0 && nada.gan.length > 0);
 });

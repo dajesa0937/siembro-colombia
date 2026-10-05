@@ -53,7 +53,7 @@ function fichaHTML(k,ha,completa){
    <h3>Dónde comprar semilla</h3><p>${c.d}</p>`:""}`;}
 function activarPlagas(cont){cont.querySelectorAll("button[data-plaga]").forEach(b=>b.onclick=()=>{
   const box=b.closest(".card,.fichaBox").querySelector(".plagaFoto");box.innerHTML=fig([b.dataset.plaga],b.dataset.n);cargarFotos(box);box.scrollIntoView({block:"nearest"});});}
-// ---------- Pestaña Cultivos ----------
+// ---------- Pantalla Fichas de cultivos ----------
 function pintarFicha(){const k=$("fCul").value,box=$("fichaOut");box.innerHTML=`<div class="card fichaBox"><h2>${C[k].n}</h2>${fichaHTML(k,1,true)}<button type="button" class="sec" onclick="usarEnCalculo('${k}')">Calcular rentabilidad de este cultivo</button></div>`;cargarFotos(box);activarPlagas(box);}
-function usarEnCalculo(k){$("cul").value=k;llenarCultivo();abrirTab("calc");calcular(true);}
-function verFicha(k){$("fCul").value=k;abrirTab("cultivos");pintarFicha();}
+function usarEnCalculo(k){ponerCultivo(k,false);abrirTab("calc");calcular(true);}
+function verFicha(k){ponerCultivo(k,false);abrirTab("fichas");}

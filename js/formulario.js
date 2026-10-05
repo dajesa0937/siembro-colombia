@@ -1,18 +1,48 @@
-// Siembro Colombia — pestañas, formulario y lectura de datos del usuario
+// Siembro Colombia — navegación entre pantallas, formulario y lectura de datos del usuario
 // Archivo cargado como script clásico: las constantes y funciones quedan globales y las usan los demás archivos.
 
+// ---------- Pantallas ----------
+// nav = botón de la barra inferior que queda marcado; padre = adónde lleva la flecha de volver si no hay historial.
+const PRINC=["inicio","cultivos","ganaderia","finanzas","mas"];
+const VISTAS={
+  inicio:{t:"Siembro Colombia",nav:"inicio"},cultivos:{t:"Cultivos",nav:"cultivos"},ganaderia:{t:"Pastoreo y ganadería",nav:"ganaderia"},
+  finanzas:{t:"Mi finca",nav:"finanzas"},mas:{t:"Más",nav:"mas"},
+  calc:{t:"Calculadora integral",nav:"finanzas",padre:"finanzas"},cuando:{t:"¿Cuándo sembrar?",nav:"cultivos",padre:"cultivos"},
+  semillas:{t:"Semillas recomendadas",nav:"cultivos",padre:"cultivos"},riego:{t:"Agua y riego",nav:"cultivos",padre:"cultivos"},
+  abonos:{t:"Abonos y fertilización",nav:"cultivos",padre:"cultivos"},fichas:{t:"Fichas de cultivos",nav:"cultivos",padre:"cultivos"},
+  clima:{t:"Clima y pronóstico",nav:"mas",padre:"mas"},guia:{t:"Guía para el campo",nav:"mas",padre:"mas"},historial:{t:"Historial de cálculos",nav:"finanzas",padre:"finanzas"}
+};
+let vistaActual="inicio",navN=0;
 document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>abrirTab(b.dataset.tab));
-const TITULOS={inicio:"Siembro Colombia",calc:"Calculadora de rentabilidad",clima:"Clima y riego",cultivos:"Fichas de cultivos",guia:"Guía para el campo"};
-function abrirTab(t){document.querySelectorAll("nav.tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===t));
-  ["inicio","calc","clima","cultivos","guia"].forEach(x=>$("tab-"+x).hidden=x!==t);$("barTitulo").textContent=TITULOS[t];scrollTo(0,0);
-  if(t==="inicio")pintarInicio();if(t==="clima")cargarClima();if(t==="cultivos"&&!$("fichaOut").innerHTML)pintarFicha();if(t==="guia")cargarFotos($("tab-guia"));}
+function abrirTab(t,o={}){
+  if(!VISTAS[t])t="inicio";
+  const V=VISTAS[t],sub=!PRINC.includes(t);
+  document.querySelectorAll("nav.tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===V.nav));
+  Object.keys(VISTAS).forEach(x=>{const e=$("tab-"+x);if(e)e.hidden=x!==t;});
+  $("barTitulo").textContent=V.t;$("atras").hidden=!sub;$("barLogo").hidden=sub;
+  if(!o.sinHistorial&&t!==vistaActual){try{history.pushState({v:t,n:++navN},"");}catch(e){}}
+  vistaActual=t;scrollTo(0,0);pintarVista(t);
+}
+function atras(){const V=VISTAS[vistaActual];if(navN>0&&history.state&&history.state.n>0)history.back();else abrirTab((V&&V.padre)||"inicio",{sinHistorial:true});}
+addEventListener("popstate",e=>{const s=e.state;navN=s?s.n:0;abrirTab(s?s.v:"inicio",{sinHistorial:true});});
+try{history.replaceState({v:"inicio",n:0},"");}catch(e){}
 
 const deps=[...new Set(MUN.map(m=>m[0]))];
 $("dep").innerHTML=deps.map(d=>`<option>${d}</option>`).join("")+`<option value="__otro">Otro lugar (ingresar clima)</option>`;
 function llenarMun(){const d=$("dep").value;$("custom").hidden=d!=="__otro";$("mun").disabled=d==="__otro";
   $("mun").innerHTML=d==="__otro"?"<option>Datos propios</option>":MUN.filter(m=>m[0]===d).map(m=>`<option>${m[1]}</option>`).join("");mostrarClima();}
-const grp=g=>Object.entries(C).filter(([,c])=>c.g===g).map(([k,c])=>`<option value="${k}">${c.n}</option>`).join("");
-$("cul").innerHTML=`<optgroup label="Cultivos agrícolas">${grp("agr")}</optgroup><optgroup label="Pastos y forrajes para ganadería">${grp("for")}</optgroup>`;
+// El selector de la calculadora muestra un grupo a la vez (Cultivo o Ganadería); los demás selectores muestran todos.
+let grupoCalc="agr";
+const opcionesCul=g=>Object.entries(C).filter(([,c])=>c.g===g).map(([k,c])=>`<option value="${k}">${c.n}</option>`).join("");
+const TODOS_CUL=`<optgroup label="Cultivos agrícolas">${opcionesCul("agr")}</optgroup><optgroup label="Pastos y forrajes para ganadería">${opcionesCul("for")}</optgroup>`;
+function llenarCul(){$("cul").innerHTML=opcionesCul(grupoCalc);
+  const g=grupoCalc==="for";$("legCalc").textContent=g?"Qué pasto o forraje quiere sembrar":"Qué quiere sembrar";$("culL").textContent=g?"Pasto o forraje":"Cultivo";
+  document.querySelectorAll("[data-calcg]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.calcg===grupoCalc));}
+// Cambia el cultivo en toda la app: la calculadora y los selectores de las demás pantallas quedan iguales.
+function ponerCultivo(k,render=true){
+  if(!C[k])return;if(C[k].g!==grupoCalc){grupoCalc=C[k].g;llenarCul();}
+  $("cul").value=k;llenarCultivo();document.querySelectorAll(".selCul").forEach(x=>x.value=k);
+  if(render)pintarVista(vistaActual);}
 function ajustarPrecio(){const c=C[$("cul").value];if(c.tipo!=="pasto")return;const l=$("uso").value==="leche";
   $("sP").value=l?c.pLeche:c.pCarne;$("sPl").textContent=l?"Precio de la leche (COP/litro)":"Precio ganado en pie (COP/kg)";}
 function llenarCultivo(){const k=$("cul").value,c=C[k];$("var").innerHTML=c.v.map(v=>`<option>${v}</option>`).join("");
@@ -30,9 +60,9 @@ function mostrarClima(){const L=lugar(),z=typeof ZONAS!=="undefined"&&ZONAS[ZMUN
 function sugerirSuelo(){const z=ZONAS[ZMUN[lugar().mun]];if(z){$("suelo").value=z.suelo;$("ph").placeholder="Típico "+z.ph;}}
 function mostrarFuente(){const f=$("fuente").value;$("fCaudal").hidden=!(f==="pozo"||f==="quebrada");$("fVol").hidden=f!=="reservorio";$("fAcu").hidden=f!=="acueducto";$("fuenteHint").hidden=f==="lluvia";}
 let climaCargado=null,ubicPropia=null;
-$("dep").onchange=()=>{llenarMun();sugerirSuelo();climaCargado=null;ubicPropia=null;};$("mun").onchange=()=>{mostrarClima();sugerirSuelo();climaCargado=null;ubicPropia=null;};
-["cAlt","cT","cR","cD","cReg"].forEach(i=>$(i).oninput=mostrarClima);
-$("cul").onchange=llenarCultivo;$("uso").onchange=ajustarPrecio;$("fuente").onchange=mostrarFuente;
+$("dep").onchange=()=>{llenarMun();sugerirSuelo();climaCargado=null;ubicPropia=null;pintarInicio();};$("mun").onchange=()=>{mostrarClima();sugerirSuelo();climaCargado=null;ubicPropia=null;pintarInicio();};
+["cAlt","cT","cR","cD","cReg"].forEach(i=>$(i).oninput=()=>{mostrarClima();pintarInicio();});
+$("cul").onchange=()=>ponerCultivo($("cul").value,false);$("uso").onchange=ajustarPrecio;$("fuente").onchange=mostrarFuente;
 function disponible(){const f=$("fuente").value;
   if(f==="pozo"||f==="quebrada"){const q=+$("qLs").value||0,h=+$("horas").value||10;return{f,dia:q*3.6*h,q,h};}
   if(f==="reservorio")return{f,total:+$("vol").value||0};

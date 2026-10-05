@@ -30,7 +30,7 @@
         <button type="button" data-ir="cultivos"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21V11"/><path d="M12 13c-4 0-6-2-6-6 4 0 6 2 6 6z"/><path d="M12 11c0-4 2-6 6-6 0 4-2 6-6 6z"/><path d="M5 21h14"/></svg></span>Cultivos</button>
         <button type="button" data-ir="ganaderia"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8C3 8 2 7 2 5c2 0 3 1 3 3zM19 8c2 0 3-1 3-3-2 0-3 1-3 3z"/><path d="M6 8h12l1 6c0 4-3 7-7 7s-7-3-7-7z"/><circle cx="9.5" cy="13" r=".6"/><circle cx="14.5" cy="13" r=".6"/><ellipse cx="12" cy="17.5" rx="3" ry="2"/></svg></span>Ganadería</button>
         <button type="button" data-ir="clima"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 15a4 4 0 1 1 .9-7.9A5 5 0 0 1 17.5 8 3.5 3.5 0 0 1 17 15z"/><path d="M8 19l-1 2M12 19l-1 2M16 19l-1 2"/></svg></span>Clima</button>
-        <button type="button" data-ir="calc"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V11M10 20V4M16 20v-7M2 20h20"/></svg></span>Finanzas</button>
+        <button type="button" data-ir="finanzas"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V11M10 20V4M16 20v-7M2 20h20"/></svg></span>Finanzas</button>
       </div>
     </div>
     <div class="bienv-pie">
@@ -40,16 +40,18 @@
   </div>
 </div>
 <script>try{if(localStorage.getItem("siembro:bienvenida"))document.getElementById("bienvenida").hidden=true;}catch(e){}</script>
-<header class="appbar"><div class="in"><svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="16" fill="#fff" opacity=".16"/><path d="M16 27V15" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><path d="M16 19c-6 0-9-3-9-9c6 0 9 3 9 9z" fill="#fff"/><path d="M16 15c0-6 3-9 9-9c0 6-3 9-9 9z" fill="#BFE8CB"/></svg><h1 id="barTitulo">Siembro Colombia</h1><span class="net" id="net"></span></div></header>
+
+<header class="appbar"><div class="in"><button type="button" class="atras" id="atras" aria-label="Volver" hidden data-ico="atras"></button><svg class="logo" id="barLogo" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="16" fill="#fff" opacity=".16"/><path d="M16 27V15" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><path d="M16 19c-6 0-9-3-9-9c6 0 9 3 9 9z" fill="#fff"/><path d="M16 15c0-6 3-9 9-9c0 6-3 9-9 9z" fill="#BFE8CB"/></svg><h1 id="barTitulo">Siembro Colombia</h1><span class="net" id="net"></span></div></header>
 <div class="wrap">
 <nav class="tabs" role="tablist" aria-label="Secciones">
-  <button role="tab" aria-selected="true" data-tab="inicio"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></span>Inicio</button>
-  <button role="tab" aria-selected="false" data-tab="calc"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21V11"/><path d="M12 13c-4 0-6-2-6-6 4 0 6 2 6 6z"/><path d="M12 11c0-4 2-6 6-6 0 4-2 6-6 6z"/><path d="M5 21h14"/></svg></span>Calcular</button>
-  <button role="tab" aria-selected="false" data-tab="clima"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 15a4 4 0 1 1 .9-7.9A5 5 0 0 1 17.5 8 3.5 3.5 0 0 1 17 15z"/><path d="M8 19l-1 2M12 19l-1 2M16 19l-1 2"/></svg></span>Clima</button>
-  <button role="tab" aria-selected="false" data-tab="cultivos"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-8 9"/></svg></span>Cultivos</button>
-  <button role="tab" aria-selected="false" data-tab="guia"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/><path d="M9 8h6M9 12h6"/></svg></span>Guía</button>
+<button role="tab" aria-selected="true" data-tab="inicio"><span class="ic" data-ico="home"></span>Inicio</button>
+<button role="tab" aria-selected="false" data-tab="cultivos"><span class="ic" data-ico="hoja"></span>Cultivos</button>
+<button role="tab" aria-selected="false" data-tab="ganaderia"><span class="ic" data-ico="vaca"></span>Ganadería</button>
+<button role="tab" aria-selected="false" data-tab="finanzas"><span class="ic" data-ico="barras"></span>Finanzas</button>
+<button role="tab" aria-selected="false" data-tab="mas"><span class="ic" data-ico="mas"></span>Más</button>
 </nav>
 
+<!-- ============ INICIO ============ -->
 <section id="tab-inicio" role="tabpanel">
 <div class="inicio">
   <div class="card saludo">
@@ -57,63 +59,107 @@
       <img class="banner-foto" id="bannerFoto" src="img/paisaje-maiz.jpg" alt="Cultivo de maíz y potreros en la montaña">
       <div class="banner-txt"><h2>¡Hola!</h2><p>Aquí tiene las recomendaciones para hoy.</p></div>
     </div>
-    <div class="saludo-txt">
-      <h2>¿Siembro o no siembro?</h2>
-      <p>Cuánto cuesta sembrar, cuánto se gana, qué riego gasta menos agua y si su agua alcanza. Con el clima de hoy y una guía para aprender a hacer las cuentas.</p>
-      <div class="pwabar"><button type="button" class="sec lleno" id="instalar" hidden>Instalar en el celular</button></div>
-      <p class="hint" id="iosTip" hidden>En iPhone: toque Compartir en Safari y luego "Agregar a pantalla de inicio".</p>
-    </div>
   </div>
   <div class="col">
-    <div class="card" id="iniFinca"></div>
+    <div class="card" id="cardFinca">
+      <div id="iniFinca"></div>
+      <div id="fincaSel" hidden>
+        <label for="dep">Departamento</label>
+        <select id="dep"></select>
+        <label for="mun">Municipio</label>
+        <select id="mun"></select>
+        <div id="custom" hidden>
+          <div class="row3">
+            <div><label for="cAlt">Altura (m)</label><input id="cAlt" type="number" value="500" inputmode="numeric"></div>
+            <div><label for="cT">Temp. °C</label><input id="cT" type="number" value="26" inputmode="decimal"></div>
+            <div><label for="cR">Lluvia mm/año</label><input id="cR" type="number" value="1500" inputmode="numeric"></div>
+          </div>
+          <div class="row2">
+            <div><label for="cD">Meses secos</label><input id="cD" type="number" value="3" min="0" max="12"></div>
+            <div><label for="cReg">Región</label>
+              <select id="cReg"><option value="costa">Costa Atlántica</option><option value="antioquia">Antioquia</option><option value="andes">Andes / Eje Cafetero</option><option value="bogota">Bogotá y Altiplano</option></select></div>
+          </div>
+        </div>
+        <div class="clima" id="clima"></div>
+      </div>
+    </div>
+    <button type="button" class="go" data-ir="calc">Calcular si conviene sembrar</button>
+  </div>
+  <div class="col">
     <h2 class="sec-t">Lo más importante ahora</h2>
-    <div class="atajos">
-      <button type="button" class="atajo" data-ir="calc"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21V11"/><path d="M12 13c-4 0-6-2-6-6 4 0 6 2 6 6z"/><path d="M12 11c0-4 2-6 6-6 0 4-2 6-6 6z"/><path d="M5 21h14"/></svg></span><span><b>Calcular si conviene sembrar</b><small id="atCalc">Elija cultivo, suelo y agua, y vea cuánto invierte y cuánto gana.</small></span></button>
-      <button type="button" class="atajo agua" data-ir="clima"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg></span><span><b>Riego y clima de hoy</b><small id="atClima">Pronóstico de 7 días y cuánta agua regar.</small></span></button>
-      <button type="button" class="atajo" data-ir="cultivos"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-8 9"/></svg></span><span><b>Fichas de cultivos</b><small>Fotos, semilla, abonos, plagas y distancia de siembra.</small></span></button>
-      <button type="button" class="atajo" data-ir="guia"><span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/><path d="M9 8h6M9 12h6"/></svg></span><span><b>Guía para el campo</b><small>Cómo medir su agua, ahorrar riego y cuándo no sembrar.</small></span></button>
+    <div class="tiles4">
+      <button type="button" class="tile" data-ir="cuando"><span class="ci" data-ico="calendario"></span><b>Siembra recomendada</b><small id="atSiembra">Cuándo sembrar según las lluvias de su zona.</small></button>
+      <button type="button" class="tile agua" data-ir="riego"><span class="ci" data-ico="gota"></span><b>Riego</b><small id="atRiego">Cuánta agua necesita y cada cuánto regar.</small></button>
+      <button type="button" class="tile ocre" data-ir="abonos"><span class="ci" data-ico="abono"></span><b>Aplicación de abono</b><small id="atAbono">Cuánto abono y cuándo aplicarlo.</small></button>
+      <button type="button" class="tile" data-ir="ganaderia"><span class="ci" data-ico="vaca"></span><b>Ganadería</b><small id="atGan">Pasto recomendado y rotación de potreros.</small></button>
     </div>
-  </div>
-  <div class="col">
-    <div class="card">
-      <div class="top-h"><h2 id="topTitulo">Lo que más rinde en su zona</h2>
-        <div class="seg" role="group" aria-label="Tipo de cultivo"><button type="button" data-g="agr" aria-pressed="true">Cultivos</button><button type="button" data-g="for" aria-pressed="false">Pastos</button></div></div>
-      <p class="hint" id="topPara"></p>
-      <ol class="top5" id="top5"></ol>
-      <p class="hint">Ganancia promedio por año y por hectárea, con precios de referencia y sin crédito ni arriendo. Toque uno para ver las cuentas completas. Antes de invertir, confirme el precio con su comprador. Fotos de Wikimedia Commons: la fuente y la licencia de cada una están en su ficha.</p>
-    </div>
+    <div class="card pwa-card" id="pwaCard"><button type="button" class="sec lleno" id="instalar" hidden>Instalar en el celular</button>
+      <p class="hint" id="iosTip" hidden>En iPhone: toque Compartir en Safari y luego "Agregar a pantalla de inicio".</p></div>
   </div>
 </div>
 </section>
 
+<!-- ============ CULTIVOS ============ -->
+<section id="tab-cultivos" role="tabpanel" hidden>
+<div class="vista">
+  <div class="card saludo cab"><div class="banner chico"><img class="banner-foto" src="img/paisaje-maiz.jpg" alt="Cultivo de maíz y potreros en la montaña" style="object-position:50% 78%"><div class="banner-txt"><h2>Cultivos</h2><p>Qué sembrar, cuándo y con qué semilla.</p></div></div></div>
+  <div class="card">
+    <h2>Cultivos más rentables</h2>
+    <div class="seg ancho" role="group" aria-label="Ver por"><button type="button" data-rent="zona" aria-pressed="true">Por zona</button><button type="button" data-rent="suelo" aria-pressed="false">Por tipo de suelo</button></div>
+    <div id="rentSueloBox" hidden><label for="rentSuelo">Tipo de suelo</label><select id="rentSuelo"></select></div>
+    <p class="hint" id="topPara"></p>
+    <ol class="top5" id="top5"></ol>
+    <button type="button" class="sec" id="verAnalisis" data-ir="calc">Ver análisis completo</button>
+    <p class="hint">Ganancia promedio por año y por hectárea, con precios de referencia y sin crédito ni arriendo. Toque uno para ver las cuentas completas. Antes de invertir, confirme el precio con su comprador. Fotos de Wikimedia Commons: la fuente y la licencia están en cada ficha.</p>
+  </div>
+  <div class="lista">
+    <button type="button" data-ir="cuando"><span class="ci" data-ico="calendario"></span><span><b>¿Cuándo sembrar?</b><small>Calendario de siembra según las lluvias.</small></span></button>
+    <button type="button" data-ir="semillas"><span class="ci" data-ico="hoja"></span><span><b>Semillas recomendadas</b><small>Variedades, cantidad por hectárea y dónde conseguirlas.</small></span></button>
+    <button type="button" data-ir="riego"><span class="ci agua" data-ico="gota"></span><span><b>Agua y riego</b><small>Cuánta agua necesita, cada cuánto regar y cómo ahorrar.</small></span></button>
+    <button type="button" data-ir="abonos"><span class="ci ocre" data-ico="abono"></span><span><b>Abonos y fertilización</b><small>Plan de abonos en bultos por hectárea.</small></span></button>
+    <button type="button" data-ir="fichas"><span class="ci" data-ico="foto"></span><span><b>Fichas de cultivos</b><small>Fotos, distancia de siembra, plagas y cómo se cultiva.</small></span></button>
+  </div>
+</div>
+</section>
 
+<!-- ============ GANADERÍA ============ -->
+<section id="tab-ganaderia" role="tabpanel" hidden>
+<div class="vista">
+  <div class="card saludo cab"><div class="banner chico"><img class="banner-foto" src="img/paisaje-vacas.jpg" alt="Vacas descansando en un potrero de la montaña" style="object-position:50% 82%"><div class="banner-txt"><h2>Pastoreo y ganadería</h2><p>Mejor pasto, más carne y más leche.</p></div></div></div>
+  <div class="seg ancho" role="group" aria-label="Ganadería"><button type="button" data-gan="pasto" aria-pressed="true">Pasto</button><button type="button" data-gan="ganado" aria-pressed="false">Ganado</button></div>
+  <div id="ganPasto"></div>
+  <div id="ganGanado" hidden></div>
+</div>
+</section>
+
+<!-- ============ FINANZAS ============ -->
+<section id="tab-finanzas" role="tabpanel" hidden>
+<div class="vista"><div id="finOut"></div></div>
+</section>
+
+<!-- ============ MÁS ============ -->
+<section id="tab-mas" role="tabpanel" hidden>
+<div class="vista">
+  <div class="lista">
+    <button type="button" data-ir="clima"><span class="ci agua" data-ico="nube"></span><span><b>Clima y pronóstico</b><small>Lluvia de los próximos 7 días y si hoy toca regar.</small></span></button>
+    <button type="button" data-ir="fichas"><span class="ci" data-ico="foto"></span><span><b>Fichas de cultivos</b><small>Fotos, distancia de siembra, plagas y abonos.</small></span></button>
+    <button type="button" data-ir="historial"><span class="ci" data-ico="reloj"></span><span><b>Historial de cálculos</b><small id="masHist">Los cálculos que ha hecho en este celular.</small></span></button>
+    <button type="button" data-ir="guia"><span class="ci" data-ico="libro"></span><span><b>Guía para el campo</b><small>Cómo medir su agua, ahorrar riego y cuándo no sembrar.</small></span></button>
+    <button type="button" id="verBienvenida"><span class="ci" data-ico="hoja"></span><span><b>Ver la bienvenida</b><small>Volver a la pantalla de inicio de la app.</small></span></button>
+  </div>
+  <p class="hint centro">Siembro Colombia · valores de referencia, confirme con su UMATA o un agrónomo antes de invertir.</p>
+</div>
+</section>
+
+<!-- ============ CALCULADORA ============ -->
 <section id="tab-calc" role="tabpanel" hidden>
 <div class="grid">
 <form class="form" id="f" onsubmit="event.preventDefault();calcular(true)">
+  <p class="lugar-chip" id="lugarCalc"></p>
+  <div class="seg ancho" role="group" aria-label="Tipo de cálculo"><button type="button" data-calcg="agr" aria-pressed="true">Cultivo</button><button type="button" data-calcg="for" aria-pressed="false">Ganadería</button></div>
   <fieldset>
-    <legend>Dónde va a sembrar</legend>
-    <label for="dep">Departamento</label>
-    <select id="dep"></select>
-    <label for="mun">Municipio</label>
-    <select id="mun"></select>
-    <div id="custom" hidden>
-      <div class="row3">
-        <div><label for="cAlt">Altura (m)</label><input id="cAlt" type="number" value="500" inputmode="numeric"></div>
-        <div><label for="cT">Temp. °C</label><input id="cT" type="number" value="26" inputmode="decimal"></div>
-        <div><label for="cR">Lluvia mm/año</label><input id="cR" type="number" value="1500" inputmode="numeric"></div>
-      </div>
-      <div class="row2">
-        <div><label for="cD">Meses secos</label><input id="cD" type="number" value="3" min="0" max="12"></div>
-        <div><label for="cReg">Región</label>
-          <select id="cReg"><option value="costa">Costa Atlántica</option><option value="antioquia">Antioquia</option><option value="andes">Andes / Eje Cafetero</option><option value="bogota">Bogotá y Altiplano</option></select></div>
-      </div>
-    </div>
-    <div class="clima" id="clima"></div>
-  </fieldset>
-
-  <fieldset>
-    <legend>Qué quiere sembrar</legend>
-    <label for="cul">Cultivo</label>
+    <legend id="legCalc">Qué quiere sembrar</legend>
+    <label for="cul" id="culL">Cultivo</label>
     <select id="cul"></select>
     <label for="var">Variedad</label>
     <select id="var"></select>
@@ -123,8 +169,14 @@
     </div>
     <div class="row2">
       <div><label for="area">Área (hectáreas)</label><input id="area" type="number" value="1" min="0.1" step="0.1" inputmode="decimal"></div>
-      <div><label for="ph">pH del suelo</label><input id="ph" type="number" placeholder="Si lo sabe" step="0.1" min="3" max="9" inputmode="decimal"></div>
+      <div><label for="sY" id="sYl">Rendimiento (t/ha)</label><input id="sY" type="number" step="0.1" inputmode="decimal"></div>
     </div>
+    <label for="sP" id="sPl">Precio de venta (COP/kg)</label><input id="sP" type="number" inputmode="numeric">
+    <p class="hint">Vienen con valores de referencia. Ponga el precio que le paga su comprador para que el cálculo sea más real.</p>
+  </fieldset>
+
+  <details class="aj" id="masOpc">
+    <summary>Suelo, agua y manejo (opcional)</summary>
     <label for="suelo">Tipo de suelo</label>
     <select id="suelo">
       <option value="arenoso">Arenoso (suelto, no retiene agua)</option>
@@ -133,10 +185,7 @@
       <option value="franco-arcilloso">Franco arcilloso</option>
       <option value="arcilloso">Arcilloso (pesado, se encharca)</option>
     </select>
-  </fieldset>
-
-  <fieldset>
-    <legend>Agua que tiene disponible</legend>
+    <label for="ph">pH del suelo</label><input id="ph" type="number" placeholder="Si lo sabe" step="0.1" min="3" max="9" inputmode="decimal">
     <label for="fuente">Fuente de agua</label>
     <select id="fuente">
       <option value="lluvia">Solo lluvia, no tengo otra fuente</option>
@@ -152,10 +201,7 @@
     <div id="fVol" hidden><label for="vol">Agua guardada (m³)</label><input id="vol" type="number" value="2000" min="0" inputmode="numeric"></div>
     <div id="fAcu" hidden><label for="m3mes">Agua permitida (m³ al mes)</label><input id="m3mes" type="number" value="150" min="0" inputmode="numeric"></div>
     <p class="hint" id="fuenteHint">¿No sabe el caudal? En la Guía le enseñamos a medirlo con un balde.</p>
-  </fieldset>
-
-  <fieldset>
-    <legend>Cómo lo quiere manejar</legend>
+    <label>Cómo lo quiere manejar</label>
     <div class="modes">
       <label class="mode"><input type="radio" name="modo" value="trad" checked><div><strong>Tradicional</strong><span>Depende de la lluvia, sin sistema de riego.</span></div></label>
       <label class="mode"><input type="radio" name="modo" value="riego"><div><strong>Con riego</strong><span>Sistema de riego que se abre y cierra a mano.</span></div></label>
@@ -163,17 +209,10 @@
     </div>
     <label for="met">Sistema de riego</label>
     <select id="met"></select>
-  </fieldset>
-
-  <details class="aj">
-    <summary>Ajustar precios y rendimientos</summary>
     <div class="row2">
-      <div><label for="sP" id="sPl">Precio de venta (COP/kg)</label><input id="sP" type="number" inputmode="numeric"></div>
-      <div><label for="sY" id="sYl">Rendimiento (t/ha)</label><input id="sY" type="number" step="0.1" inputmode="decimal"></div>
       <div><label for="sE" id="sEl">Establecimiento (COP/ha)</label><input id="sE" type="number" inputmode="numeric"></div>
       <div><label for="sM" id="sMl">Mantenimiento (COP/ha/año)</label><input id="sM" type="number" inputmode="numeric"></div>
     </div>
-    <p class="hint">Vienen con valores de referencia. Ponga el precio que le paga su comprador para que el cálculo sea más real.</p>
   </details>
 
   <button class="go" type="submit">Calcular</button>
@@ -181,42 +220,88 @@
 
 <section class="results" id="out" aria-live="polite">
   <div class="empty">
-    <h2>Elija municipio, cultivo y su fuente de agua</h2>
+    <h2>Elija el cultivo, el área y el precio</h2>
     <p>Por ejemplo: cacao en Tierralta, ají en Montería, aguacate Hass en La Ceja o pasto para ceba en Planeta Rica. Le decimos si conviene, cuánto invertir, cuánto ganaría, qué riego ahorra más agua y si su agua alcanza.</p>
   </div>
 </section>
 </div>
 </section>
 
-<section id="tab-clima" role="tabpanel" hidden>
-  <div class="results" style="max-width:900px">
-    <div class="card">
-      <h2 id="cLugar">Clima</h2>
-      <p class="hint" id="cPara"></p>
-      <div class="pwabar"><button type="button" class="sec" id="miUbic">Usar mi ubicación</button><button type="button" class="sec" id="actClima">Actualizar</button></div>
-    </div>
-    <div id="climaOut"><div class="empty"><h2>Cargando el clima…</h2><p>Necesita señal la primera vez. Después se guarda el último pronóstico para verlo sin conexión.</p></div></div>
-  </div>
+<!-- ============ ¿CUÁNDO SEMBRAR? ============ -->
+<section id="tab-cuando" role="tabpanel" hidden>
+<div class="vista">
+  <p class="lugar-chip" data-lugar></p>
+  <div class="card"><label for="cuCul">Cultivo</label><select class="selCul" id="cuCul"></select>
+    <div class="seg ancho" role="group" aria-label="Ver calendario"><button type="button" data-cu="cultivo" aria-pressed="true">Por cultivo</button><button type="button" data-cu="clima" aria-pressed="false">Por clima</button><button type="button" data-cu="region" aria-pressed="false">Por región</button></div></div>
+  <div id="cuandoOut"></div>
+</div>
 </section>
 
-<section id="tab-cultivos" role="tabpanel" hidden>
-  <div class="results" style="max-width:900px">
+<!-- ============ SEMILLAS ============ -->
+<section id="tab-semillas" role="tabpanel" hidden>
+<div class="vista">
+  <p class="lugar-chip" data-lugar></p>
+  <div class="card"><label for="seCul">Cultivo</label><select class="selCul" id="seCul"></select></div>
+  <div id="semOut"></div>
+</div>
+</section>
+
+<!-- ============ AGUA Y RIEGO ============ -->
+<section id="tab-riego" role="tabpanel" hidden>
+<div class="vista">
+  <p class="lugar-chip" data-lugar></p>
+  <div class="seg ancho" role="group" aria-label="Agua para"><button type="button" data-rg="cultivos" aria-pressed="true">Cultivos</button><button type="button" data-rg="ganaderia" aria-pressed="false">Ganadería</button></div>
+  <div class="card" id="rgSelBox"><label for="rgCul">Cultivo</label><select class="selCul" id="rgCul"></select></div>
+  <div id="riegoOut"></div>
+</div>
+</section>
+
+<!-- ============ ABONOS ============ -->
+<section id="tab-abonos" role="tabpanel" hidden>
+<div class="vista">
+  <p class="lugar-chip" data-lugar></p>
+  <div class="card"><label for="abCul">Cultivo</label><select class="selCul" id="abCul"></select></div>
+  <div id="aboOut"></div>
+</div>
+</section>
+
+<!-- ============ FICHAS ============ -->
+<section id="tab-fichas" role="tabpanel" hidden>
+  <div class="vista">
     <div class="card"><h2>Fichas de cultivos</h2><p>Fotos, producción por hectárea, distancia de siembra, semilla, cómo se cultiva, abonos y plagas.</p>
-      <label for="fCul">Cultivo</label><select id="fCul"></select></div>
+      <label for="fCul">Cultivo</label><select class="selCul" id="fCul"></select></div>
     <div id="fichaOut"></div>
   </div>
 </section>
 
+<!-- ============ HISTORIAL ============ -->
+<section id="tab-historial" role="tabpanel" hidden>
+<div class="vista"><div id="histOut"></div></div>
+</section>
+
+<section id="tab-clima" role="tabpanel" hidden>
+<div class="vista">
+  <div class="card">
+    <h2 id="cLugar">Clima</h2>
+    <p class="hint" id="cPara"></p>
+    <label for="clCul">Cultivo para los cálculos</label><select class="selCul" id="clCul"></select>
+    <div class="seg ancho seg6" role="group" aria-label="Plazo del clima"><button type="button" data-cl="hoy" aria-pressed="true">Hoy</button><button type="button" data-cl="dias" aria-pressed="false">16 días</button><button type="button" data-cl="mes" aria-pressed="false">Mes</button><button type="button" data-cl="trimestre" aria-pressed="false">3 meses</button><button type="button" data-cl="semestre" aria-pressed="false">6 meses</button><button type="button" data-cl="anio" aria-pressed="false">Año</button></div>
+    <div class="pwabar"><button type="button" class="sec" id="miUbic">Usar mi ubicación</button><button type="button" class="sec" id="actClima">Actualizar</button></div>
+  </div>
+  <div id="climaOut"><div class="empty"><h2>Cargando el clima…</h2><p>Necesita señal la primera vez. Después se guarda el último pronóstico para verlo sin conexión.</p></div></div>
+</div>
+</section>
+
 <section id="tab-guia" role="tabpanel" hidden>
+<div class="vista">
 <div class="guia">
 <details open><summary>Cómo usar la aplicación</summary>
 <ol class="tight">
-<li>En <b>Calcular</b>, elija el departamento y el municipio. La app trae la altura, la temperatura y la lluvia típica del lugar.</li>
-<li>Escoja el cultivo, la variedad, el área y el tipo de suelo. Si tiene análisis de suelo, ponga el pH.</li>
-<li>Diga qué agua tiene: solo lluvia, pozo, quebrada, reservorio o acueducto.</li>
-<li>Elija tradicional, con riego o automatizado. La app le compara los tres de todas formas.</li>
-<li>Toque <b>Calcular</b>. Lea primero el veredicto y luego abra "¿Cómo se calculó?" para entender las cuentas.</li>
-<li>En <b>Clima y riego</b> mire cada mañana si tiene que regar hoy o si viene lluvia.</li>
+<li>En <b>Inicio</b>, elija su departamento y municipio (toque "Cambiar"). La app trae la altura, la temperatura y la lluvia típica del lugar.</li>
+<li>En <b>Cultivos</b> vea cuáles rinden más en su zona, cuándo sembrar, qué semilla y qué abono usar.</li>
+<li>En <b>Finanzas</b> toque "Hacer un cálculo": elija cultivo, área, rendimiento y precio, y la app le dice si conviene sembrar.</li>
+<li>En <b>Ganadería</b> mire qué pasto le sirve, cómo rotar los potreros y cuántos animales aguanta su lote.</li>
+<li>En <b>Más</b> encuentra el clima de hoy, las fichas de cultivos, el historial de cálculos y esta guía.</li>
 </ol></details>
 
 <details><summary>Cómo medir cuánta agua tiene</summary>
@@ -316,10 +401,12 @@
 </ul>
 </details>
 </div>
-</section>
-
 <p class="foot">Valores de referencia aproximados para Colombia en 2026, a precio de finca. Los precios agrícolas cambian mucho según la temporada y el comprador. El pronóstico del clima viene de Open-Meteo. Use esta herramienta como primer filtro y confirme con un agrónomo, la UMATA o el gremio antes de invertir.</p>
 </div>
+</section>
+
+</div>
+
 
 <!-- El orden importa: datos y cálculos antes que la interfaz -->
 <script src="js/utilidades.js"></script>
@@ -332,6 +419,7 @@
 <script src="js/fichas-ui.js"></script>
 <script src="js/clima.js"></script>
 <script src="js/inicio.js"></script>
+<script src="js/pantallas.js"></script>
 <script src="js/animaciones.js"></script>
 <script src="js/app.js"></script>
 </body>

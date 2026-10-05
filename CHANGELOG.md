@@ -1,5 +1,23 @@
 # Cambios
 
+## 1.6.0 — 2026-10-05
+- Pantalla Clima con seis pestañas: Hoy, 16 días, Mes, 3 meses, 6 meses y Año. Cada una trae recomendaciones separadas para el cultivo y para el ganado.
+- Mes, 3 meses, 6 meses y Año usan el clima real de los últimos 10 años del lugar (Open-Meteo, se baja una sola vez y queda guardado). Muestran lluvia, temperatura, agua que falta para el cultivo elegido, pasto del ganado y los años más secos y más lluviosos. Sin conexión usan un cálculo aproximado y lo dicen.
+- No hay predicción de meses futuros: nadie la puede dar con precisión. Los períodos largos son "lo normal" de ese lugar.
+- Funciones nuevas y reutilizables en `js/calculos.js` (con pruebas): `resumenClimatico`, `periodoMeses`, `balanceMes`, `indiceForraje`, `recomendacionesPeriodo`, `recomendacionesPronostico`. El calendario de siembra, ¿Cuándo sembrar? (Por clima), Ganadería (pasto durante el año) e Inicio ya las usan.
+- Inicio muestra la recomendación más importante del pronóstico de la semana.
+- Pronóstico de 7 a 16 días (`urlClima`).
+
+## 1.5.0 — 2026-10-05
+- La app se reorganizó como el mockup. Barra inferior: Inicio, Cultivos, Ganadería, Finanzas y Más. Las pantallas de adentro tienen flecha para volver (y el botón atrás del celular también funciona).
+- Inicio: banner "¡Hola!", tarjeta "Tu finca" con el clima (el lugar se cambia ahí mismo) y cuatro atajos: Siembra recomendada, Riego, Aplicación de abono y Ganadería.
+- Cultivos: los 5 más rentables (por zona o por tipo de suelo) y entradas a ¿Cuándo sembrar?, Semillas recomendadas, Agua y riego, Abonos y fertilización y Fichas.
+- Pantallas nuevas: ¿Cuándo sembrar? (calendario por mes, por cultivo, por clima y por región), Semillas recomendadas, Agua y riego (cultivos y ganadería), Abonos y fertilización, Pastoreo y ganadería (pasto, rotación de potreros y cuántos animales aguanta el lote), Mi finca – Resumen financiero (con gráfico de costos) e Historial de cálculos.
+- Calculadora integral: Cultivo o Ganadería, área, rendimiento y precio a la vista; suelo, agua y manejo quedan en "opcional". El resultado muestra producción, ingreso bruto, costos y utilidad neta.
+- Cálculos nuevos en `js/calculos.js` (con pruebas): `calendarioSiembra`, `lluviaMensual`, `rangoMeses`, `frecuenciaRiego`, `dosisAbono`, `desgloseCostos` (la suma da exactamente los costos del año) y `rotacion`. Los cálculos de rentabilidad no cambian.
+- Archivo nuevo: `js/pantallas.js`. El calendario y la rotación son guías generales (la app lo dice) para confirmar con la UMATA.
+- Pruebas nuevas de pantallas y de los cálculos anteriores.
+
 ## 1.4.0 — 2026-10-05
 - Corrección: el flujo de GitHub ahora publica también la carpeta `img/` (sin ella no se veían las fotos). Una prueba nueva avisa si falta alguna carpeta.
 - Fotos propias de la finca: la bienvenida usa las vacas en el potrero y el banner del Inicio cambia entre el maíz (cultivos) y las vacas (pastos). Quedan guardadas para verse sin internet.

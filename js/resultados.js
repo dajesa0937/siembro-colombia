@@ -16,11 +16,16 @@ function calcular(usuario){
     <div class="what">${c.n} (${$("var").value}) en ${lugarTxt}, ${num(ha,1)} ha, ${MODOS[modo].toLowerCase()}${modo!=="trad"?" por "+MT.n.toLowerCase():""}${pasto?", para "+(uso==="leche"?"leche":"ceba"):""}</div>
     <p>${v.why}</p>
     <div class="big">
+      <div><b>${F.filas[F.H].prod}</b><small>${pasto?(uso==="leche"?"Leche por año":"Carne por año"):"Producción por año"}${c.tipo==="cic"?" ("+F.filas[1].cic+" "+(F.filas[1].cic>1?"ciclos":"ciclo")+")":" en plena producción"}</small></div>
+      <div><b>${millones(F.filas[F.H].ing)}</b><small>Ingreso bruto por año</small></div>
+      <div><b>${millones(F.filas[F.H].cos)}</b><small>Costos por año</small></div>
+      <div><b class="${F.anual<0?'neg':''}">${millones(F.anual)}</b><small>Utilidad neta por año</small></div>
       <div><b>${millones(F.inversion)}</b><small>Inversión inicial${c.tipo==="cic"?" (primer ciclo)":" (hasta que produzca)"}</small></div>
-      <div><b class="${F.anual<0?'neg':''}">${millones(F.anual)}</b><small>Utilidad por año${c.tipo==="cic"?" con "+F.filas[1].cic+" "+(F.filas[1].cic>1?"ciclos":"ciclo"):" en plena producción"}</small></div>
       <div><b class="${F.acum<0?'neg':''}">${millones(F.acum)}</b><small>Ganancia neta en ${horiz}</small></div>
       <div><b>${modo==="trad"?"Solo lluvia":num(F.agua)+" m³"}</b><small>Agua de riego al año</small></div>
-    </div></div>`;
+    </div>
+    <div class="chips"><button type="button" class="sec" data-ir="finanzas">Resumen financiero</button><button type="button" class="sec" data-ir="cuando">¿Cuándo sembrar?</button><button type="button" class="sec" data-ir="riego">Agua y riego</button><button type="button" class="sec" data-ir="abonos">Abonos</button></div>
+    </div>`;
   h+=`<div class="card"><h2>Así se cultiva ${c.n.toLowerCase()}</h2>${fichaHTML(k,ha,false)}<button type="button" class="sec" onclick="verFicha('${k}')">Ver ficha completa con fotos de plagas</button></div>`;
 
   const D_txt={lluvia:"Solo lluvia",pozo:`Pozo: ${num(D.q||0,1)} L/s por ${D.h} h = ${num(D.dia||0)} m³ al día`,quebrada:`Quebrada: ${num(D.q||0,1)} L/s por ${D.h} h = ${num(D.dia||0)} m³ al día`,reservorio:`Reservorio: ${num(D.total||0)} m³ guardados`,acueducto:`Acueducto: ${num(D.dia||0,1)} m³ al día`}[D.f];
@@ -87,8 +92,8 @@ function calcular(usuario){
     ${alts.map(o=>`<button type="button" onclick="probar('${o.x}')"><b>${o.r.c.n}</b><span>${millones(o.prom)} por año en promedio<br>${Math.round(o.r.apt.total*100)} % apto, ${o.r.A.necesita?METODOS[o.r.A.mejor].n.toLowerCase():"sin riego"}</span></button>`).join("")}</div>
     <p class="hint">Calculado con precios de referencia, su misma área y su agua disponible. Toque uno para ver el detalle.</p></div>`;
 
-  $("out").innerHTML=h;cargarFotos($("out"));guardar();climaCargado=null;
+  $("out").innerHTML=h;cargarFotos($("out"));ultimoCalc={P,R};guardar();if(usuario)guardarHistorial(P,R);climaCargado=null;
   if(typeof animarResultado==="function")animarResultado($("out"));
   if(usuario&&innerWidth<900)$("out").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
 }
-function probar(k){$("cul").value=k;llenarCultivo();calcular(true);}
+function probar(k){ponerCultivo(k,false);calcular(true);}
