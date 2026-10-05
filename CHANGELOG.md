@@ -6,6 +6,7 @@
 - Los cálculos no cambian. Nueva función `topCultivos` en `js/calculos.js`, con pruebas.
 - Pruebas nuevas: la lista del service worker coincide con lo que carga `index.html`, las rutas son relativas y cada pestaña tiene su sección.
 - Colores de la app instalada (`theme_color` y fondo) al nuevo verde.
+- Corrección: al actualizar, la app ya no mezcla archivos viejos con nuevos (service worker con red primero para los archivos propios, y recarga una vez al instalar la versión nueva).
 
 ## 1.2.0 — 2026-10-04
 - Campo animado en el encabezado (sol, nubes, plantas que crecen y gotas).

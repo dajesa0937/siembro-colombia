@@ -35,3 +35,8 @@ test('las rutas son relativas (la app vive en /siembro-colombia/ en GitHub Pages
 test('cada pestaña del menú tiene su sección', () => {
   for (const [, t] of html.matchAll(/data-tab="([a-z]+)"/g)) assert.ok(html.includes(`id="tab-${t}"`), `falta la sección tab-${t}`);
 });
+
+test('el service worker pide los archivos propios a la red primero (evita mezclar versiones al actualizar)', () => {
+  assert.match(sw, /cache: 'reload'/, 'la instalación debe saltarse la caché del navegador');
+  assert.match(sw, /url\.origin === location\.origin\) \{\s*e\.respondWith\(fetch\(req, \{ cache: 'no-cache' \}\)/, 'los archivos propios deben ir red primero');
+});

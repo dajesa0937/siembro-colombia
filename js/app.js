@@ -8,7 +8,11 @@ $("zonasGuia").innerHTML=Object.values(ZONAS).map(z=>`<p><b>${z.n}:</b> ${z.txt}
 $("fotosRiego").innerHTML=["goteo","micro","aspersion","surcos","inundacion"].map(m=>fig(FOTO_RIEGO[m],METODOS[m].n)).join("");
 
 // ---------- PWA ----------
-if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+if("serviceWorker" in navigator){
+  // Cuando se instala una versión nueva, se recarga una vez para no quedar con archivos viejos y nuevos mezclados.
+  const habiaSW=!!navigator.serviceWorker.controller;let recargada=false;
+  navigator.serviceWorker.addEventListener("controllerchange",()=>{if(habiaSW&&!recargada){recargada=true;location.reload();}});
+  addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}
 let promptInstalar=null;
 addEventListener("beforeinstallprompt",e=>{e.preventDefault();promptInstalar=e;$("instalar").hidden=false;});
 $("instalar").onclick=async()=>{if(!promptInstalar)return;promptInstalar.prompt();await promptInstalar.userChoice;promptInstalar=null;$("instalar").hidden=true;};

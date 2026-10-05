@@ -1,6 +1,6 @@
 // Siembro Colombia — service worker: la app funciona sin internet en el campo.
 // IMPORTANTE: suba VERSION cada vez que publique cambios para que los celulares se actualicen.
-const VERSION = 'siembrocolombia-v7';
+const VERSION = 'siembrocolombia-v8';
 const SHELL = [
   './', './index.html', './manifest.webmanifest', './css/estilos.css', './css/animaciones.css',
   './js/utilidades.js', './js/datos/municipios.js', './js/datos/cultivos.js', './js/datos/fichas.js',
@@ -9,7 +9,7 @@ const SHELL = [
 ];
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(VERSION).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
+  e.waitUntil(caches.open(VERSION).then(c => c.addAll(SHELL.map(u => new Request(u, { cache: 'reload' })))).then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', e => {
@@ -25,7 +25,7 @@ self.addEventListener('fetch', e => {
 
   // Página: primero la red para recibir actualizaciones; sin señal, la copia guardada.
   if (req.mode === 'navigate') {
-    e.respondWith(fetch(req).then(r => {
+    e.respondWith(fetch(req, { cache: 'no-cache' }).then(r => {
       const copia = r.clone(); caches.open(VERSION).then(c => c.put('./index.html', copia)); return r;
     }).catch(() => caches.match('./index.html')));
     return;
@@ -34,8 +34,17 @@ self.addEventListener('fetch', e => {
   // El pronóstico no se guarda aquí: la app guarda el último en localStorage.
   if (url.host.endsWith('open-meteo.com')) return;
 
-  // Archivos propios, fuentes de Google y fotos de Wikimedia: copia guardada y se actualiza en segundo plano.
-  const cacheable = url.origin === location.origin || url.host.endsWith('gstatic.com') ||
+  // Archivos propios: primero la red, para que nunca se mezclen archivos nuevos con viejos; sin señal, la copia guardada.
+  if (url.origin === location.origin) {
+    e.respondWith(fetch(req, { cache: 'no-cache' }).then(r => {
+      if (r.ok) { const copia = r.clone(); caches.open(VERSION).then(c => c.put(req, copia)); }
+      return r;
+    }).catch(() => caches.match(req)));
+    return;
+  }
+
+  // Fuentes de Google y fotos de Wikimedia: copia guardada y se actualiza en segundo plano.
+  const cacheable = url.host.endsWith('gstatic.com') ||
     url.host.endsWith('googleapis.com') || url.host.endsWith('wikipedia.org') || url.host.endsWith('wikimedia.org');
   if (!cacheable) return;
   e.respondWith(caches.open(VERSION).then(async c => {
