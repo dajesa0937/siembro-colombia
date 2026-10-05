@@ -169,7 +169,6 @@ button.link:focus-visible{outline:2px solid var(--ocre)}
 .col{display:grid;gap:14px;align-content:start}
 @media(min-width:900px){.inicio{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.saludo{grid-column:1/-1}}
 .saludo{padding:0;overflow:hidden}
-.saludo .hero{margin:0;border-radius:0;max-height:210px}
 .saludo-txt{padding:14px 16px 16px}
 .saludo-txt h2{font-size:1.5rem;margin-bottom:4px}
 .saludo-txt p{margin:.3rem 0;color:var(--muted)}
@@ -216,39 +215,33 @@ ol.top5{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:8px}
 
 /* ---------- Bienvenida (primera vez) ---------- */
 .bienv{outline:none;position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;color:#fff;background:linear-gradient(#1E7A4B,#0B2F1E);overflow:auto}
-.bienv-fondo{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity .8s}
-.bienv-fondo.listo{opacity:1}
-.bienv::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(rgba(8,40,25,.35) 0%,rgba(8,40,25,.55) 45%,rgba(6,30,18,.92) 100%);pointer-events:none}
+.bienv-fondo{position:absolute;inset:0;background:#0F4F31 url("../img/paisaje-vacas-v.jpg") 45% 50%/cover no-repeat}
+@media (min-aspect-ratio:1/1){.bienv-fondo{background-image:url("../img/paisaje-vacas.jpg");background-position:50% 65%}}
+.bienv::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(rgba(6,32,20,.55) 0%,rgba(6,32,20,.22) 24%,rgba(6,32,20,.08) 42%,rgba(6,32,20,.3) 62%,rgba(6,32,20,.78) 100%);pointer-events:none}
 .bienv-in{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;justify-content:space-between;gap:20px;max-width:520px;width:100%;margin:0 auto;padding:calc(env(safe-area-inset-top,0px) + 28px) 22px calc(env(safe-area-inset-bottom,0px) + 22px)}
 .bienv-marca{text-align:center}
 .bienv-logo-svg{width:64px;height:64px;display:block;margin:0 auto 6px}
 .bienv-marca h2{font-size:2.3rem;font-weight:800;letter-spacing:-.02em;line-height:1.1;text-shadow:0 2px 12px rgba(0,0,0,.4)}
 .bienv-marca p{margin:.2rem 0 0;font-size:1.15rem;opacity:.95;text-shadow:0 1px 8px rgba(0,0,0,.4)}
-.bienv-lema{font-size:1.45rem;font-weight:700;line-height:1.25;text-align:center;margin:0 0 20px;text-shadow:0 2px 10px rgba(0,0,0,.5)}
+.bienv-lema{font-size:1.45rem;font-weight:700;line-height:1.25;text-align:center;margin:0 0 20px;text-shadow:0 1px 3px rgba(0,0,0,.7),0 2px 14px rgba(0,0,0,.6)}
 .bienv-ico{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.bienv-ico button{all:unset;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;font-weight:700;font-size:.85rem;text-align:center;-webkit-tap-highlight-color:transparent}
-.bienv-ico button span{display:grid;place-items:center;width:58px;height:58px;border-radius:16px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.35);backdrop-filter:blur(4px)}
+.bienv-ico button{all:unset;text-shadow:0 1px 4px rgba(0,0,0,.7);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;font-weight:700;font-size:.85rem;text-align:center;-webkit-tap-highlight-color:transparent}
+.bienv-ico button span{display:grid;place-items:center;width:58px;height:58px;border-radius:16px;background:rgba(0,0,0,.32);border:1px solid rgba(255,255,255,.45);backdrop-filter:blur(3px)}
 .bienv-ico button svg{width:28px;height:28px}
 .bienv-ico button:focus-visible,.bienv .go:focus-visible{outline:3px solid #FFD27A;outline-offset:3px;border-radius:14px}
 .bienv .go{background:#15803D;color:#fff;box-shadow:0 6px 18px rgba(0,0,0,.35)}
 .bienv-pwa{display:flex;align-items:center;justify-content:center;gap:6px;margin:12px 0 0;font-size:.9rem;opacity:.95}
 .bienv-pwa svg{width:18px;height:18px}
-.bienv-cred{margin:6px 0 0;text-align:center;font-size:.72rem;opacity:.8}
-.bienv-cred a{color:#fff}
-.bienv-cred:empty{display:none}
-@media (prefers-reduced-motion:reduce){.bienv-fondo{transition:none}}
 
-/* ---------- Banner del Inicio (foto de paisaje o dibujo) ---------- */
-.banner{position:relative;height:170px;overflow:hidden;background:linear-gradient(135deg,#1E7A4B,#0F4F31)}
-.banner-fondo{position:absolute;inset:0}
-.banner .hero{width:100%;height:100%;max-height:none}
+/* ---------- Banner del Inicio (foto de la finca) ---------- */
+.banner{position:relative;height:180px;overflow:hidden;background:linear-gradient(135deg,#1E7A4B,#0F4F31)}
 .banner-foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.banner::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(8,42,26,.88) 0%,rgba(8,42,26,.55) 55%,rgba(8,42,26,.15) 100%)}
+.banner::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(8,42,26,.72) 0%,rgba(8,42,26,.35) 50%,rgba(8,42,26,0) 85%)}
 .banner-txt{position:absolute;z-index:2;left:16px;right:16px;top:50%;transform:translateY(-50%);color:#fff}
+.banner-txt{text-shadow:0 1px 3px rgba(0,0,0,.7),0 2px 12px rgba(0,0,0,.5)}
 .banner-txt h2{font-size:1.9rem;font-weight:800;color:#fff;margin:0 0 4px}
 .banner-txt p{margin:0;color:#fff;font-size:1.05rem;font-weight:600;line-height:1.3}
-.credito{position:absolute;z-index:2;right:10px;bottom:6px;font-size:.7rem;color:#fff;opacity:.85;text-shadow:0 1px 3px rgba(0,0,0,.7)}
-.saludo .banner .hero{border-radius:0}
+@media(min-width:900px){.banner{height:230px}}
 
 /* ---------- Fotos en el Top ---------- */
 .top5 button{position:relative;gap:10px}

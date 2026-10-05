@@ -47,8 +47,19 @@ test('los botones con data-ir llevan a una pestaña que existe (o a ganadería)'
   }
 });
 
-test('la bienvenida tiene su botón Comenzar y la pantalla de Inicio sus contenedores de fotos', () => {
-  for (const id of ['bienvenida', 'comenzar', 'bienvFondo', 'heroBox', 'bannerCred', 'top5', 'iniFinca']) {
+test('la bienvenida tiene su botón Comenzar y la pantalla de Inicio su banner de foto', () => {
+  for (const id of ['bienvenida', 'comenzar', 'bienvFondo', 'bannerFoto', 'top5', 'iniFinca']) {
     assert.ok(html.includes(`id="${id}"`), `falta id="${id}" en index.html`);
+  }
+});
+
+test('las fotos de la finca existen y están en la lista del service worker (se ven sin internet)', () => {
+  const css = leer('css/estilos.css');
+  const fotos = [...css.matchAll(/url\("\.\.\/(img\/[^"]+)"\)/g)].map(m => m[1]);
+  fotos.push(...[...leer('js/inicio.js').matchAll(/"(img\/[^"]+\.jpg)"/g)].map(m => m[1]), ...[...html.matchAll(/src="(img\/[^"]+)"/g)].map(m => m[1]));
+  assert.ok(fotos.length >= 3);
+  for (const f of new Set(fotos)) {
+    assert.ok(existsSync(new URL('../' + f, import.meta.url)), `no existe ${f}`);
+    assert.ok(shell.includes(f), `${f} falta en SHELL de sw.js`);
   }
 });

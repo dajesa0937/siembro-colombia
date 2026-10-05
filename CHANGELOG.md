@@ -1,8 +1,9 @@
 # Cambios
 
 ## 1.4.0 — 2026-10-05
+- Fotos propias de la finca: la bienvenida usa las vacas en el potrero y el banner del Inicio cambia entre el maíz (cultivos) y las vacas (pastos). Quedan guardadas para verse sin internet.
 - Pantalla de bienvenida (solo la primera vez) como el mockup: paisaje, lema, botones Cultivos, Ganadería, Clima y Finanzas, y botón Comenzar.
-- Inicio con banner de paisaje ("¡Hola!") y fotos de cada cultivo en la lista de lo que más rinde. Las fotos vienen de Wikimedia Commons (con enlace a la fuente); sin internet o sin foto queda un fondo verde y un dibujo.
+- Inicio con banner ("¡Hola!") y fotos de cada cultivo en la lista de lo que más rinde. Las miniaturas vienen de Wikimedia Commons; sin internet o sin foto queda un ícono de planta.
 - Pruebas nuevas: botones de Inicio, bienvenida y títulos de foto de cada cultivo.
 
 ## 1.3.0 — 2026-10-04

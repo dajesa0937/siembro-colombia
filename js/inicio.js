@@ -46,28 +46,20 @@ function pintarTop(){
   cargarMiniaturas($("top5"));
 }
 
-// ---------- Fotos de Wikimedia: miniaturas del Top y paisaje de la bienvenida y del Inicio ----------
-// Si no hay internet o no hay foto, queda el dibujo; las fotos ya vistas se guardan para verlas sin señal.
-const PAISAJE=["Valle de Cocora","Paisaje cultural cafetero","Ganado bovino"];
+// ---------- Fotos ----------
+// Miniaturas del Top: vienen de Wikimedia Commons; sin internet o sin foto queda el ícono de la planta.
 const primeraCarga=urls=>urls.reduce((p,u)=>p.then(ok=>ok||new Promise(res=>{const i=new Image();i.onload=()=>res(u);i.onerror=()=>res(null);i.src=u;})),Promise.resolve(null));
-let paisajeP=null;
-function paisaje(){return paisajeP||(paisajeP=(async()=>{const f=await buscarFoto(PAISAJE);if(!f)return null;
-  const src=await primeraCarga([f.src.replace("/640px-","/960px-"),f.src]);return src?{src,page:f.page,titulo:f.titulo}:null;})());}
-async function aplicarPaisaje(){
-  const p=await paisaje();if(!p)return;
-  const fondo=$("bienvFondo");if(fondo){fondo.style.backgroundImage=`url("${p.src}")`;fondo.classList.add("listo");}
-  const box=$("heroBox");if(box&&!box.querySelector(".banner-foto"))box.insertAdjacentHTML("beforeend",`<img class="banner-foto" src="${p.src}" alt="Paisaje de Colombia">`);
-  if(p.page){const a=$("bannerCred");if(a){a.textContent="Foto: Wikimedia Commons";a.href=p.page;a.hidden=false;}
-    const b=$("bienvCred");if(b)b.innerHTML=`<a href="${p.page}" target="_blank" rel="noopener">Foto: Wikimedia Commons</a>`;}
-}
 function cargarMiniaturas(root){root.querySelectorAll("[data-mini]:not([data-ok])").forEach(async el=>{
   el.dataset.ok="1";const f=await buscarFoto(el.dataset.mini.split("|"));if(!f)return;
   const src=await primeraCarga([f.src]);if(src)el.innerHTML=`<img src="${src}" alt="${el.dataset.alt||f.titulo}" loading="lazy">`;});}
 
 // ---------- Bienvenida (solo la primera vez) ----------
 function cerrarBienvenida(){const b=$("bienvenida");if(!b||b.hidden)return;b.hidden=true;try{localStorage.setItem("siembro:bienvenida","1");}catch(e){}}
-function sincronizarSeg(){document.querySelectorAll(".seg button[data-g]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.g===topGrupo));}
-function iniciarInicio(){if(!$("bienvenida").hidden)$("bienvenida").focus({preventScroll:true});aplicarPaisaje();}
+// El banner del Inicio cambia de foto según se vean cultivos (maíz) o pastos (vacas).
+function actualizarBanner(){const f=$("bannerFoto");if(!f)return;const p=topGrupo==="for";
+  f.src=p?"img/paisaje-vacas.jpg":"img/paisaje-maiz.jpg";f.alt=p?"Vacas descansando en un potrero de la montaña":"Cultivo de maíz y potreros en la montaña";f.style.objectPosition=p?"50% 82%":"50% 78%";}
+function sincronizarSeg(){document.querySelectorAll(".seg button[data-g]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.g===topGrupo));actualizarBanner();}
+function iniciarInicio(){actualizarBanner();if(!$("bienvenida").hidden)$("bienvenida").focus({preventScroll:true});}
 
 document.addEventListener("click",e=>{
   const ir=e.target.closest("[data-ir]");

@@ -1,18 +1,5 @@
 /* Siembro Colombia — animaciones e ilustraciones. Todo en CSS/SVG, sin librerías, y se apaga con "reducir movimiento". */
 
-/* ---------- Campo animado de la pantalla de Inicio ---------- */
-.hero{display:block;width:100%;height:auto;max-height:230px;margin:0;background:linear-gradient(#CFE6F2 0%,#EAF4EA 62%,#D8E8C8 100%)}
-.hero .sol{transform-origin:600px 56px}
-.hero .loma1{fill:#8DBF7B}.hero .loma2{fill:#6FA865}.hero .surco{stroke:#4C8A47;stroke-width:3;fill:none;stroke-linecap:round}
-.hero .nube{fill:#fff;opacity:.92}
-.hero .tallo{stroke:#2F6B3A;stroke-width:3.5;fill:none;stroke-linecap:round}
-.hero .hoja{fill:#3E8B49}
-.hero .fruto{fill:#B97B16}
-.hero .gota{fill:#1F6A8A;opacity:.85}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .hero{background:linear-gradient(#1B2C3A 0%,#1F3326 62%,#243A22 100%)}:root:not([data-theme="light"]) .hero .nube{fill:#CFE0EA;opacity:.35}:root:not([data-theme="light"]) .hero .loma1{fill:#35603A}:root:not([data-theme="light"]) .hero .loma2{fill:#2A4C2E}}
-:root[data-theme="dark"] .hero{background:linear-gradient(#1B2C3A 0%,#1F3326 62%,#243A22 100%)}
-:root[data-theme="dark"] .hero .nube{fill:#CFE0EA;opacity:.35}
-
 /* ---------- Estado vacío ---------- */
 .empty .brote{display:block;width:84px;height:84px;margin:0 0 8px}
 
@@ -35,11 +22,6 @@
 
 @media (prefers-reduced-motion:no-preference){
   /* Encabezado */
-  .hero .sol{animation:girar 40s linear infinite}
-  .hero .nube.n1{animation:nube 38s linear infinite}.hero .nube.n2{animation:nube 54s linear -20s infinite}.hero .nube.n3{animation:nube 46s linear -8s infinite}
-  .hero .planta{transform-box:fill-box;transform-origin:50% 100%;animation:crece 1.4s cubic-bezier(.2,.8,.3,1.2) var(--d,0s) both}
-  .hero .planta .mece{transform-box:fill-box;transform-origin:50% 100%;animation:mece 4s ease-in-out 1.6s infinite}
-  .hero .gota{animation:cae 2.6s ease-in var(--d,0s) infinite}
   .empty .brote .m{transform-box:fill-box;transform-origin:50% 100%;animation:mece 3.5s ease-in-out infinite}
   /* Entrada de tarjetas del resultado */
   #out .card,#out .verdict,#climaOut .card{animation:sube .5s ease-out both}
