@@ -1,5 +1,11 @@
 # Cambios
 
+## 1.7.0 — 2026-10-05
+- Nuevo catálogo de semillas de pasto de clima cálido (SOESP / Durespo) en `js/datos/pastos.js`: 8 variedades (Brachiaria decumbens Basilisk, humidicola Comum y Llanero, brizantha Marandú y Xaraés, ruziziensis Ruzi, Panicum Tanzania y Mombasa) con altura, lluvia mínima, suelo ácido, encharcamiento, sequía, heno, ensilaje, proteína, forraje por hectárea, días a pastoreo y semilla por hectárea.
+- Pantalla Semillas (cultivo "Pastos de clima cálido"): guía que ordena las variedades según su lugar, para qué es el pasto, tipo y fertilidad del suelo; calcula los kilos y el costo de semilla para su área según el valor cultural de la bolsa, y trae consejos de siembra del catálogo.
+- Ganadería: tarjeta "Semilla de pasto que se adapta a su finca" con las 3 mejores y un botón a la guía completa.
+- Funciones nuevas y reutilizables en `js/calculos.js` (con pruebas): `kgSemillaPasto`, `costoSemillaPasto`, `recomendarPastos`.
+
 ## 1.6.2 — 2026-10-05
 - Se quitó el botón "Más", que escondía opciones. Ahora la barra de abajo tiene cinco botones siempre visibles: Inicio, Cultivos, Ganadería, Clima y Finanzas.
 - Fichas, Historial y Guía se ven en la barra de arriba en computador y, en el celular, en la lista "Más herramientas" al final de Inicio (junto con "Ver la bienvenida").

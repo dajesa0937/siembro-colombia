@@ -208,3 +208,35 @@ function recomendacionesPronostico(dias){
   if(!agri.length)agri.push({n:"ok",t:`Sin alertas de clima para los cultivos en estos días. Siga su plan de riego.`});
   return{agri,gan};
 }
+
+// ---------- Semillas de pasto (catálogo en js/datos/pastos.js; funciones puras, sin DOM) ----------
+// Kilos de semilla para sembrar `ha` hectáreas: la recomendación viene en puntos de valor cultural (PVC) y se divide por el % de valor cultural (VC) de la bolsa.
+// Una bolsa con VC bajo trae más paja: hay que echar más kilos. Compare por costo del área total, no por precio del kilo.
+function kgSemillaPasto(puntos,vc,ha=1){const v=Math.min(100,Math.max(1,+vc||0));return puntos/v*Math.max(0,+ha||0);}
+// Costo de semilla para `ha` hectáreas con una bolsa de precio `precioKg` y valor cultural `vc`.
+function costoSemillaPasto(puntos,vc,precioKg,ha=1){return kgSemillaPasto(puntos,vc,ha)*Math.max(0,+precioKg||0);}
+// Ordena los pastos del catálogo para un lugar. L={alt,r}; o={uso:"pastoreo"|"corte"|"heno"|"silo", acido, encharca, fertil:"baja"|"media"|"alta", sequia}.
+// Devuelve [{p, ok, puntaje, bien:[], ojo:[]}]: los que sirven primero (ok) y de mayor puntaje; los que no sirven al final con el motivo en `ojo`.
+function recomendarPastos(lista,L,o={}){
+  const uso=o.uso||"pastoreo",fert=o.fertil||"media",ex={baja:1,media:2,alta:3}[fert]||2;
+  return lista.map(p=>{
+    const bien=[],ojo=[];let ok=true,pt=50;
+    if(L.alt>p.altMax){ok=false;ojo.push(`Su finca está a ${Math.round(L.alt)} msnm y este pasto llega hasta ${p.altMax} msnm.`);}
+    if(L.r<p.lluviaMin){ok=false;ojo.push(`Llueve ${Math.round(L.r)} mm al año y pide mínimo ${p.lluviaMin} mm (sin riego se seca).`);}
+    else if(L.r<p.lluviaMin+200){ojo.push("Está cerca del mínimo de lluvia: en verano puede necesitar riego.");pt-=5;}
+    if(o.acido){if(p.acido===3){bien.push("Aguanta suelo ácido.");pt+=18;}else if(p.acido===2){pt+=6;}else{ojo.push("No aguanta bien el suelo ácido: encale primero.");pt-=18;}}
+    if(o.encharca){if(p.encharc===3){bien.push("Aguanta encharcamiento.");pt+=18;}else if(p.encharc===2){pt+=6;}else{ojo.push("No aguanta que se encharque el potrero.");pt-=18;}}
+    if(o.sequia){if(p.frioSeq===3){bien.push("Aguanta la sequía.");pt+=14;}else if(p.frioSeq===1){ojo.push("Sufre en sequías largas.");pt-=14;}}
+    if(p.exig>ex){ojo.push(fert==="baja"?"Pide un suelo más fértil que el suyo: sin abono rinde poco.":"Pide abono para rendir; con su suelo no da todo.");pt-=(p.exig-ex)*10;}
+    else if(p.exig===1&&fert==="baja"){bien.push("Se da en suelo pobre.");pt+=8;}
+    if(uso==="heno"){if(p.heno>=3){bien.push("Sirve para heno.");pt+=12;}else if(p.heno===0){ojo.push("No sirve para heno.");pt-=12;}}
+    if(uso==="silo"){if(p.silaje>=3){bien.push("Sirve para ensilaje.");pt+=12;}else if(p.silaje===0){ojo.push("No sirve para ensilaje.");pt-=12;}}
+    if(uso==="corte"){pt+=(p.ms-16)*.8;}
+    if(uso==="pastoreo"){if(p.pastInt===3){bien.push("Aguanta pastoreo pesado.");pt+=8;}pt+=(p.ms-16)*.4+(p.calidad-2)*4;}
+    if(p.mion===1){ojo.push("El salivazo (mión) lo ataca fuerte.");pt-=6;}
+    if(p.foto===1){ojo.push("Puede causar fotosensibilidad: cuidado con terneros, ovejas y caballos.");pt-=4;}
+    if(p.ms>=22)bien.push(`Produce mucho: ${p.ms} t de materia seca por ha al año.`);
+    if(p.prot>=12)bien.push(`Buena proteína (${p.prot} %).`);
+    return{p,ok,puntaje:Math.round(pt),bien,ojo};
+  }).sort((a,b)=>(b.ok-a.ok)||(b.puntaje-a.puntaje));
+}

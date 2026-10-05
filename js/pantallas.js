@@ -63,6 +63,7 @@ function pintarPasto(){
      <div class="kv"><div><small>Forraje al año</small><b>${num(c.y,0)} t materia seca/ha</b></div><div><small>Aguanta</small><b>${num(pas.F.ugg,1)} animales/ha</b></div><div><small>Variedades</small><b>${c.v.slice(0,3).join(", ")}</b></div></div><p>${c.nota}</p>`;
   }else h+=`<p>Con este suelo, clima y agua ningún pasto de la lista sale claramente rentable. Revise el agua para el verano o pruebe forraje para silo.</p>`;
   h+=`</div>`;
+  h+=htmlPastosCorto();
   if(top.length)h+=`<div class="card"><h2>Pastos y forrajes que le sirven</h2><ol class="top5" id="topPasto">${listaTop(top,t=>t.c.tipo==="pasto"?`${num(t.F.ugg,1)} animales por ha`:"forraje para silo y verano")}</ol><p class="hint">Ganancia promedio por año y por hectárea, sin contar la compra de animales. Toque uno para ver las cuentas.</p></div>`;
   const D=mesesDelLugar(),ind=D.meses.map(indiceForraje),flacos=D.meses.filter((m,i)=>ind[i]<.5).map(m=>m.m);
   h+=`<div class="card"><h2>Pasto durante el año</h2>${barraCal(ind.map(i=>i>=1?2:i>=.5?1:0))}<div class="leyenda"><span><i class="m2"></i>Abundante</span><span><i class="m1"></i>Normal</span><span><i class="m0"></i>Poco</span></div>
@@ -137,11 +138,45 @@ function pintarCuando(){
   $("cuandoOut").innerHTML=h;
 }
 
+// ---------- Semillas de pasto (catálogo SOESP / Durespo) ----------
+const pasEst={uso:"pastoreo",suelo:null,fert:"media",vc:null,precio:null};
+const USOS_PASTO={pastoreo:"Pastoreo (ganado en el potrero)",corte:"Corte (picar y llevar)",heno:"Heno",silo:"Ensilaje (silo)"};
+function rankingPastos(){
+  const L=lugar(),ph=+$("ph").value||null,suelo=pasEst.suelo||(ph&&ph<5.5?"acido":"normal");
+  return recomendarPastos(PASTOS,L,{uso:pasEst.uso,acido:suelo==="acido",encharca:suelo==="encharca",fertil:pasEst.fert,sequia:L.dry>=3});
+}
+function htmlGuiaPastos(){
+  const L=lugar(),ha=Math.max(.1,+$("area").value||1),ph=+$("ph").value||null,suelo=pasEst.suelo||(ph&&ph<5.5?"acido":"normal"),precio=pasEst.precio==null?C.pastoT.pS:pasEst.precio;
+  const R=rankingPastos(),op=(o,v)=>Object.entries(o).map(([k,t])=>`<option value="${k}"${k===v?" selected":""}>${t}</option>`).join("");
+  let h=`<div class="card"><h2>Pastos de clima cálido para ${lugarTxt()}</h2><p class="hint">Datos del catálogo de semillas SOESP (Durespo), que es de quien las vende: úselo como guía y confirme con la UMATA, Agrosavia o un técnico.</p>
+   <label for="pasUso">¿Para qué es el pasto?</label><select id="pasUso">${op(USOS_PASTO,pasEst.uso)}</select>
+   <label for="pasSuelo">Su suelo</label><select id="pasSuelo">${op({normal:"Normal",acido:"Ácido (pH bajo de 5,5)",encharca:"Se encharca en invierno"},suelo)}</select>
+   <label for="pasFert">Fertilidad del suelo</label><select id="pasFert">${op({baja:"Baja (suelo flaco)",media:"Media",alta:"Alta (suelo bueno)"},pasEst.fert)}</select>
+   <label for="pasVC">Valor cultural de su bolsa (%, está en la etiqueta)</label><input id="pasVC" type="number" min="20" max="100" value="${pasEst.vc||""}" placeholder="Vacío: el del catálogo" inputmode="numeric">
+   <label for="pasPrecio">Precio del kilo de semilla ($)</label><input id="pasPrecio" type="number" min="0" value="${Math.round(precio)}" inputmode="numeric">
+   <p class="hint">El valor cultural dice cuánta semilla de la bolsa nace de verdad. Una bolsa de 60 % trae más paja que una de 75 %: pida precio por <b>hectárea sembrada</b>, no por kilo. Si deja el valor cultural vacío, se usa el del catálogo de cada variedad. Los kilos son para ${num(ha,1)} ha.</p></div>`;
+  h+=`<div class="vars pastos">`+R.map((r,i)=>{const p=r.p,vc=pasEst.vc||Math.round(p.puntos/p.kgRef),kg=kgSemillaPasto(p.puntos,vc,ha);
+    return`<div class="card pasto ${r.ok?"":"no"}"><div class="pt"><b>${i+1}. ${p.n}</b><span class="ins ${r.ok?(i<3?"ok":"med"):"no"}">${r.ok?(i<3?"Recomendado":"Posible"):"No para su finca"}</span></div>
+     ${r.bien.length?`<ul class="tight si">${r.bien.map(t=>`<li>${t}</li>`).join("")}</ul>`:""}${r.ojo.length?`<ul class="tight ojo">${r.ojo.map(t=>`<li>${t}</li>`).join("")}</ul>`:""}
+     <div class="kv"><div><small>Semilla para ${num(ha,1)} ha (VC ${vc} %)</small><b>${num(kg,1)} kg</b></div><div><small>Costo de semilla</small><b>${millones(kg*precio)}</b></div><div><small>Forraje al año</small><b>${p.ms} t MS/ha</b></div><div><small>Proteína</small><b>${p.prot} %</b></div><div><small>Entra a pastoreo</small><b>${p.diasPast[0]}–${p.diasPast[1]} días · ${p.altPast} cm</b></div><div><small>Nace en</small><b>${p.germ[0]}–${p.germ[1]} días</b></div></div>
+     <p class="hint">${p.nota} Lluvia mínima ${p.lluviaMin} mm/año; hasta ${num(p.altMax)} msnm.</p></div>`;}).join("")+`</div>`;
+  h+=`<div class="card agua"><h3 style="margin-top:0">Cómo sembrar el pasto bien</h3><ul class="tight"><li>Siembre en los meses de más lluvia: el pasto nace y crece más rápido.</li><li>Prepare bien el suelo, sin terrones, y siembre a no más de 2 cm de profundidad.</li><li>Pase el rodillo después de sembrar: la semilla agarra mejor la humedad y se pierde menos agua.</li><li>No mezcle la semilla con urea ni potasio: la queman. El fósforo (DAP, superfosfato) sí se puede mezclar el mismo día de la siembra.</li><li>Guarde la semilla en lugar fresco y seco, lejos del sol y la humedad.</li><li>Si siembra desde avioneta o al voleo grande, eche entre 20 y 30 % más semilla.</li><li>Elegir un pasto que no es para su zona es de las mayores causas de potreros que se degradan.</li></ul></div>`;
+  return h;
+}
+function htmlPastosCorto(){
+  const R=rankingPastos().filter(r=>r.ok).slice(0,3);
+  if(!R.length)return`<div class="card"><h2>Semilla de pasto</h2><p>Con la altura y lluvia de ${lugarTxt()} ninguna variedad del catálogo de clima cálido sirve sin riego. Mire los pastos de clima frío o consulte en la UMATA.</p></div>`;
+  return`<div class="card"><h2>Semilla de pasto que se adapta a su finca</h2><ol class="tight">${R.map(r=>`<li><b>${r.p.n}</b>: ${r.p.ms} t de forraje por ha al año, ${r.p.prot} % de proteína; el catálogo recomienda ${num(r.p.kgRef,1)} kg de semilla por ha.</li>`).join("")}</ol>
+    <button type="button" class="sec" data-pasto-ir>Ver todas las variedades y calcular la semilla</button><p class="hint">Dice qué pasto se da en su zona, no si el negocio es rentable (eso lo calcula la app arriba). Catálogo SOESP (Durespo): confirme con un técnico.</p></div>`;
+}
+
 // ---------- Semillas ----------
 function pintarSemillas(){
   const k=$("seCul").value||$("cul").value,c=C[k],F=FICHA[k],ha=Math.max(.1,+$("area").value||1);
   let h=`<div class="card"><h2>${c.n}</h2>${fig(F.w,c.n,"grande")}
     <div class="kv"><div><small>Semilla por hectárea</small><b>${num(c.dens)} ${c.u}</b></div><div><small>Precio aproximado</small><b>${cop(c.pS)} c/u</b></div><div><small>Costo por hectárea</small><b>${millones(c.dens*c.pS)}</b></div><div><small>Distancia de siembra</small><b>${F.dist?`${num(F.dist[0],2)} × ${num(F.dist[1],2)} m`:"según el manejo"}</b></div></div></div>`;
+  if(k==="pastoT")h+=htmlGuiaPastos();
+  else if(k==="pastoF")h+=`<div class="card"><p class="hint">El catálogo de semillas de pasto que trae la app es de clima cálido (hasta unos 2.000 msnm). Para kikuyo o ryegrass pregunte en la UMATA o en el almacén agropecuario.</p></div>`;
   h+=`<h2 class="sec-t">Variedades que se usan en Colombia</h2><div class="vars">${c.v.map((v,i)=>`<div class="card var"><span class="ci" data-ico="hoja"></span><div><b>${v}</b><small>${num(c.dens*ha)} ${c.u} para ${num(ha,1)} ha · ${millones(c.dens*c.pS*ha)}</small></div><button type="button" class="sec" data-var="${i}">Usar en el cálculo</button></div>`).join("")}</div>`;
   h+=`<div class="card agua"><h3 style="margin-top:0">Dónde conseguir la semilla</h3><p>${c.d}</p><p><b>Compre siempre semilla certificada</b> con registro del ICA y pida la factura: una semilla mala le daña el cultivo entero.</p>
     <p class="hint">La app no tiene datos de rendimiento de cada variedad: pregunte en la UMATA, en Agrosavia o al gremio cuál se da mejor en su zona. Para cambiar el área, use la calculadora.</p></div>`;
@@ -241,6 +276,7 @@ document.addEventListener("click",e=>{
   if((b=T("[data-cuk]"))){ponerCultivo(b.dataset.cuk,false);cuModo="cultivo";pintarCuando();scrollTo(0,0);return;}
   if((b=T("[data-rg]"))){rgModo=b.dataset.rg;pintarRiego();return;}
   if((b=T("[data-calcg]"))){grupoCalc=b.dataset.calcg;llenarCul();ponerCultivo($("cul").options[0].value,false);return;}
+  if(T("[data-pasto-ir]")){ponerCultivo("pastoT",false);abrirTab("semillas");return;}
   if((b=T("[data-var]"))){$("var").selectedIndex=+b.dataset.var;abrirTab("calc");calcular(true);return;}
   if((b=T("[data-hist]"))){const h=leerHistorial()[+b.dataset.hist];if(h&&aplicarGuardado(h.d)){abrirTab("calc");calcular(false);abrirTab("finanzas");}return;}
   if(T("#borrarHist")){try{localStorage.removeItem(HKEY);}catch(x){}pintarHistorial();return;}
@@ -249,6 +285,11 @@ document.addEventListener("change",e=>{
   const t=e.target;
   if(t.classList.contains("selCul")){ponerCultivo(t.value);return;}
   if(t.id==="rentSuelo"){$("suelo").value=t.value;pintarCultivos();return;}
+  if(t.id==="pasUso"){pasEst.uso=t.value;pintarSemillas();return;}
+  if(t.id==="pasSuelo"){pasEst.suelo=t.value;pintarSemillas();return;}
+  if(t.id==="pasFert"){pasEst.fert=t.value;pintarSemillas();return;}
+  if(t.id==="pasVC"){pasEst.vc=t.value===""?null:Math.min(100,Math.max(20,+t.value||75));pintarSemillas();return;}
+  if(t.id==="pasPrecio"){pasEst.precio=Math.max(0,+t.value||0);pintarSemillas();return;}
   if(t.id==="gPas"){gEst.k=t.value;calcGanado();return;}
   if(t.id==="gUso"){gEst.uso=t.value;calcGanado();return;}
 });

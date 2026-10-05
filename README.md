@@ -30,6 +30,7 @@ siembro/
 │   ├── utilidades.js       Formato de pesos, números y acceso al DOM
 │   ├── datos/
 │   │   ├── municipios.js   Municipios: región, altura, temperatura, lluvia, meses secos, coordenadas
+│   │   ├── pastos.js       Catálogo de semillas de pasto de clima cálido (SOESP / Durespo)
 │   │   ├── cultivos.js     Cultivos, sistemas de riego y valores económicos de referencia
 │   │   └── fichas.js       Fichas técnicas, zonas de suelo y fotos de riego
 │   ├── calculos.js         Cálculos puros, sin DOM: aptitud, agua, finanzas y veredicto

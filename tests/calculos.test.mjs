@@ -4,12 +4,12 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 
-const archivos = ['js/utilidades.js', 'js/datos/municipios.js', 'js/datos/cultivos.js', 'js/datos/fichas.js', 'js/calculos.js'];
+const archivos = ['js/utilidades.js', 'js/datos/municipios.js', 'js/datos/cultivos.js', 'js/datos/fichas.js', 'js/datos/pastos.js', 'js/calculos.js'];
 const codigo = archivos.map(f => readFileSync(new URL('../' + f, import.meta.url), 'utf8')).join('\n') +
-  '\nthis.api={MUN,C,METODOS,FICHA,ZONAS,ZMUN,aptitud,agua,haPosibles,finanzas,veredicto,topCultivos,MESES,lluviaMensual,calendarioSiembra,rangoMeses,frecuenciaRiego,dosisAbono,desgloseCostos,rotacion,resumenClimatico,periodoMeses,mesesAproximados,balanceMes,indiceForraje,recomendacionesPeriodo,recomendacionesPronostico};';
+  '\nthis.api={PASTOS,kgSemillaPasto,costoSemillaPasto,recomendarPastos,MUN,C,METODOS,FICHA,ZONAS,ZMUN,aptitud,agua,haPosibles,finanzas,veredicto,topCultivos,MESES,lluviaMensual,calendarioSiembra,rangoMeses,frecuenciaRiego,dosisAbono,desgloseCostos,rotacion,resumenClimatico,periodoMeses,mesesAproximados,balanceMes,indiceForraje,recomendacionesPeriodo,recomendacionesPronostico};';
 const ctx = vm.createContext({ Intl, Math, Number, Object, Array, JSON });
 vm.runInContext(codigo, ctx);
-const { MUN, C, METODOS, FICHA, ZONAS, ZMUN, aptitud, agua, haPosibles, finanzas, veredicto, topCultivos, MESES, lluviaMensual, calendarioSiembra, rangoMeses, frecuenciaRiego, dosisAbono, desgloseCostos, rotacion, resumenClimatico, periodoMeses, mesesAproximados, balanceMes, indiceForraje, recomendacionesPeriodo, recomendacionesPronostico } = ctx.api;
+const { PASTOS, kgSemillaPasto, costoSemillaPasto, recomendarPastos, MUN, C, METODOS, FICHA, ZONAS, ZMUN, aptitud, agua, haPosibles, finanzas, veredicto, topCultivos, MESES, lluviaMensual, calendarioSiembra, rangoMeses, frecuenciaRiego, dosisAbono, desgloseCostos, rotacion, resumenClimatico, periodoMeses, mesesAproximados, balanceMes, indiceForraje, recomendacionesPeriodo, recomendacionesPronostico } = ctx.api;
 
 const lugar = nombre => { const m = MUN.find(x => x[1] === nombre); return { dep: m[0], mun: m[1], reg: m[2], alt: m[3], t: m[4], r: m[5], dry: m[6], lat: m[7], lon: m[8] }; };
 const base = c => ({ p: c.tipo === 'pasto' ? c.pCarne : c.p, y: c.y, est: c.est, man: c.man });
@@ -229,4 +229,42 @@ test('recomendaciones del pronóstico: lluvia fuerte = no abonar; días secos = 
   assert.ok(calor.gan.some(x => /sombra/i.test(x.t)));
   const nada = recomendacionesPronostico([{ ll: 3, max: 28 }, { ll: 3, max: 28 }]);
   assert.ok(nada.agri.length > 0 && nada.gan.length > 0);
+});
+
+test('catálogo de pastos: 8 variedades con datos completos', () => {
+  assert.equal(PASTOS.length, 8);
+  for (const p of PASTOS) {
+    assert.ok(p.n && p.puntos > 0 && p.kgRef > 0 && p.ms > 0 && p.lluviaMin > 0 && p.altMax > 0, p.k);
+    const vcRef = p.puntos / p.kgRef; assert.ok(vcRef >= 40 && vcRef <= 80, `${p.k}: valor cultural de referencia raro (${vcRef})`);
+    assert.ok(p.germ[0] < p.germ[1] && p.diasPast[0] < p.diasPast[1]);
+  }
+});
+
+test('kgSemillaPasto: más kilos si la bolsa tiene menos valor cultural', () => {
+  assert.equal(kgSemillaPasto(375, 75, 1), 5);
+  assert.ok(Math.abs(kgSemillaPasto(375, 60, 2) - 12.5) < 1e-9);
+  assert.ok(kgSemillaPasto(375, 60) > kgSemillaPasto(375, 75));
+  assert.equal(kgSemillaPasto(375, 0, 1), 375);
+  assert.equal(costoSemillaPasto(375, 75, 5700, 2), 57000);
+});
+
+test('recomendarPastos: no recomienda lo que no sirve para la altura o lluvia', () => {
+  const frio = recomendarPastos(PASTOS, { alt: 1900, r: 1500 }, {});
+  assert.ok(frio.find(r => r.p.k === 'tanzania').ok === false);
+  assert.ok(frio.find(r => r.p.k === 'decumbens').ok === true);
+  const seco = recomendarPastos(PASTOS, { alt: 100, r: 600 }, {});
+  assert.ok(seco.every(r => !r.ok));
+  const lista = recomendarPastos(PASTOS, { alt: 100, r: 1300 }, {});
+  const oks = lista.map(r => r.ok); assert.ok(oks.indexOf(false) === -1 || oks.slice(oks.indexOf(false)).every(x => !x));
+});
+
+test('recomendarPastos: suelo ácido favorece Brachiaria y castiga Panicum; heno descarta Brachiaria que no sirven', () => {
+  const L = { alt: 100, r: 1500 };
+  const ac = recomendarPastos(PASTOS, L, { acido: true, fertil: 'baja' });
+  assert.ok(['decumbens', 'humidicola', 'llanero'].includes(ac[0].p.k));
+  assert.ok(ac.findIndex(r => r.p.k === 'mombasa') > 3);
+  const heno = recomendarPastos(PASTOS, L, { uso: 'heno', fertil: 'alta' });
+  assert.ok(heno[0].p.heno >= 3);
+  const enc = recomendarPastos(PASTOS, L, { encharca: true });
+  assert.equal(enc[0].p.k, 'humidicola');
 });

@@ -409,3 +409,14 @@ ul.dias16{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:6px}
 /* Botones extra de la barra solo en pantalla grande (en el celular están en Cultivos, Finanzas e Inicio) */
 nav.tabs button.pc{display:none}
 @media(min-width:900px){nav.tabs button.pc{display:flex}}
+
+/* Semillas de pasto (catálogo) */
+.pastos .pasto .pt{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.pastos .pasto.no{opacity:.82}
+.ins{display:inline-block;padding:3px 10px;border-radius:99px;font-size:.82rem;font-weight:700;white-space:nowrap}
+.ins.ok{background:var(--leaf-soft);color:var(--titulo)}
+.ins.med{background:var(--ocre-soft);color:var(--ocre)}
+.ins.no{background:var(--aji-soft);color:var(--aji)}
+.pasto ul.si li::marker{color:var(--leaf)}
+.pasto ul.ojo li::marker{color:var(--aji)}
+.pasto .kv{margin-top:8px}
