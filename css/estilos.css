@@ -396,3 +396,12 @@ ul.dias16{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:6px}
 .vista .scroll table{font-size:.86rem}
 .vista .scroll th,.vista .scroll td{padding:8px 4px}
 .vista .scroll td small{white-space:nowrap;color:var(--muted)}
+
+/* Botones de arriba bien visibles: Volver con texto y Cambiar lugar como botón */
+.appbar .atras{width:auto;height:42px;margin-left:-4px;padding:0 14px 0 8px;gap:2px;display:flex;align-items:center;border:1.5px solid rgba(255,255,255,.7);border-radius:999px;background:rgba(255,255,255,.14)}
+.appbar .atras[hidden]{display:none}
+.appbar .atras b{font-size:.95rem;font-weight:800}
+.appbar .atras span{display:grid;place-items:center}
+.appbar .atras svg{width:22px;height:22px}
+.lugar-chip{flex-wrap:wrap;gap:6px 10px}
+.lugar-chip button.sec{min-height:38px;padding:6px 14px;font-size:.88rem;margin-left:auto}

@@ -1,6 +1,7 @@
 # Cambios
 
 ## 1.6.1 — 2026-10-05
+- Arriba de cada pantalla: el botón "Volver" ahora tiene texto y borde, y "Cambiar lugar" es un botón visible (antes era un enlace pequeño).
 - Los botones de pestañas de cada pantalla (Hoy, 16 días, Mes…; Pasto/Ganado; Por cultivo/Por clima…) ahora son botones grandes con borde, separados y siempre visibles; en Clima quedan en dos filas de tres.
 
 ## 1.6.0 — 2026-10-05

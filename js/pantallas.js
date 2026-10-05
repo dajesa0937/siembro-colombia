@@ -27,7 +27,7 @@ function pintarVista(t){
     riego:pintarRiego,abonos:pintarAbonos,fichas:pintarFicha,historial:pintarHistorial,inicio:pintarInicio,
     clima:()=>{if(climaJ)renderClima();cargarClima();},guia:()=>cargarFotos($("tab-guia"))})[t]();
 }
-function pintarChips(){const h=`${PIN_SVG}<b>${lugarTxt()}</b><button type="button" class="link" data-cambiar>Cambiar</button>`;
+function pintarChips(){const h=`${PIN_SVG}<b>${lugarTxt()}</b><button type="button" class="sec" data-cambiar>Cambiar lugar</button>`;
   document.querySelectorAll("[data-lugar],#lugarCalc").forEach(e=>{e.innerHTML=h;});}
 const seg=(sel,attr,val)=>document.querySelectorAll(sel).forEach(b=>b.setAttribute("aria-pressed",b.dataset[attr]===val));
 const sueloTxt=()=>$("suelo").selectedOptions[0].text.split(" (")[0].toLowerCase();
