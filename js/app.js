@@ -23,3 +23,4 @@ function restaurar(){try{const d=JSON.parse(localStorage.getItem("siembro:ultimo
   CAMPOS.forEach(i=>{if(!["dep","mun","cul"].includes(i)&&d[i]!==undefined&&d[i]!=="")$(i).value=d[i];});
   const m=document.querySelector(`input[name=modo][value="${d.modo}"]`);if(m)m.checked=true;mostrarClima();mostrarFuente();return true;}catch(e){return false;}}
 if(restaurar())calcular(false);
+pintarInicio();

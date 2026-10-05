@@ -37,8 +37,9 @@ siembro/
 │   ├── resultados.js       Pinta el resultado del cálculo
 │   ├── fichas-ui.js        Fotos de Wikimedia, dibujo de distancia y pestaña Cultivos
 │   ├── clima.js            Pronóstico Open-Meteo y riego del día
+│   ├── inicio.js           Pantalla de Inicio: su finca, atajos y cultivos que más rinden
 │   └── app.js              Arranque, instalación y datos guardados
-├── tests/calculos.test.mjs Pruebas de los cálculos
+├── tests/                  Pruebas: calculos.test.mjs (cálculos) y publicacion.test.mjs (sin conexión y rutas)
 ├── .github/workflows/pruebas.yml  Pruebas automáticas en GitHub
 └── netlify.toml            Configuración de Netlify (ya no se usa; ahora se publica en GitHub Pages)
 ```

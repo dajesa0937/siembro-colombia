@@ -6,10 +6,10 @@ import vm from 'node:vm';
 
 const archivos = ['js/utilidades.js', 'js/datos/municipios.js', 'js/datos/cultivos.js', 'js/datos/fichas.js', 'js/calculos.js'];
 const codigo = archivos.map(f => readFileSync(new URL('../' + f, import.meta.url), 'utf8')).join('\n') +
-  '\nthis.api={MUN,C,METODOS,FICHA,ZONAS,ZMUN,aptitud,agua,haPosibles,finanzas,veredicto};';
+  '\nthis.api={MUN,C,METODOS,FICHA,ZONAS,ZMUN,aptitud,agua,haPosibles,finanzas,veredicto,topCultivos};';
 const ctx = vm.createContext({ Intl, Math, Number, Object, Array, JSON });
 vm.runInContext(codigo, ctx);
-const { MUN, C, METODOS, FICHA, ZONAS, ZMUN, aptitud, agua, haPosibles, finanzas, veredicto } = ctx.api;
+const { MUN, C, METODOS, FICHA, ZONAS, ZMUN, aptitud, agua, haPosibles, finanzas, veredicto, topCultivos } = ctx.api;
 
 const lugar = nombre => { const m = MUN.find(x => x[1] === nombre); return { dep: m[0], mun: m[1], reg: m[2], alt: m[3], t: m[4], r: m[5], dry: m[6], lat: m[7], lon: m[8] }; };
 const base = c => ({ p: c.tipo === 'pasto' ? c.pCarne : c.p, y: c.y, est: c.est, man: c.man });
@@ -57,4 +57,24 @@ test('si el agua no alcanza para la mitad del área, dice que no siembre esa ár
 test('en Bogotá la papa no necesita el mismo riego que en la Costa', () => {
   const bog = agua(C.papa, lugar('Bogotá'), 1), cos = agua(C.maiz, lugar('Valledupar'), 1);
   assert.ok(bog.eto < cos.eto);
+});
+
+test('topCultivos: ordena de mayor a menor ganancia y no incluye cultivos que pierden plata', () => {
+  const top = topCultivos(lugar('Tierralta'), { n: 5 });
+  assert.ok(top.length > 0 && top.length <= 5);
+  for (let i = 1; i < top.length; i++) assert.ok(top[i - 1].prom >= top[i].prom);
+  for (const t of top) { assert.notEqual(t.v.k, 'no'); assert.ok(t.prom > 0); assert.ok(t.apt.total >= 0.6); }
+});
+
+test('topCultivos: no recomienda aguacate Hass en Montería (clima no apto)', () => {
+  const top = topCultivos(lugar('Montería'), { n: 30 });
+  assert.ok(!top.some(t => t.k === 'hass'));
+});
+
+test('topCultivos: sin agua disponible solo propone manejo tradicional', () => {
+  for (const t of topCultivos(lugar('Tierralta'), { n: 30 })) assert.equal(t.modo, 'trad');
+});
+
+test('topCultivos: el grupo de pastos solo trae pastos y forrajes', () => {
+  for (const t of topCultivos(lugar('Planeta Rica'), { grupo: 'for', n: 30 })) assert.equal(t.c.g, 'for');
 });

@@ -70,8 +70,8 @@ function animarClima(root,code){
   if(h&&/^Riegue/.test(h.textContent))h.insertAdjacentHTML("afterend",riegoSVG());
 }
 
-// Arranque: campo animado en el encabezado y brote en el estado vacío.
+// Arranque: campo animado en la pantalla de Inicio y brote en el estado vacío.
 (function(){
-  const b=document.querySelector("header.top .pwabar");if(b)b.insertAdjacentHTML("beforebegin",heroSVG());
+  const b=$("heroBox");if(b)b.innerHTML=heroSVG();
   const e=document.querySelector("#out .empty");if(e)e.insertAdjacentHTML("afterbegin",broteSVG());
 })();

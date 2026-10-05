@@ -1,5 +1,12 @@
 # Cambios
 
+## 1.3.0 — 2026-10-04
+- Diseño nuevo: barra verde arriba, tarjetas, barra inferior de 5 botones (Inicio, Calcular, Clima, Cultivos, Guía) y letra Source Sans 3.
+- Pantalla de Inicio: su finca (clima del lugar), el pronóstico de hoy, atajos y los 5 cultivos o pastos que más rinden en su zona. Al tocar uno se abre el cálculo completo.
+- Los cálculos no cambian. Nueva función `topCultivos` en `js/calculos.js`, con pruebas.
+- Pruebas nuevas: la lista del service worker coincide con lo que carga `index.html`, las rutas son relativas y cada pestaña tiene su sección.
+- Colores de la app instalada (`theme_color` y fondo) al nuevo verde.
+
 ## 1.2.0 — 2026-10-04
 - Campo animado en el encabezado (sol, nubes, plantas que crecen y gotas).
 - Resultado de rentabilidad: ícono animado en el veredicto, cifras que suben contando y barras de aptitud que se llenan.

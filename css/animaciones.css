@@ -1,8 +1,7 @@
 /* Siembro Colombia — animaciones e ilustraciones. Todo en CSS/SVG, sin librerías, y se apaga con "reducir movimiento". */
 
-/* ---------- Encabezado con campo animado ---------- */
-header.top{position:relative;overflow:hidden}
-.hero{display:block;width:100%;height:auto;max-height:230px;margin:14px 0 4px;border-radius:14px;background:linear-gradient(#CFE6F2 0%,#EAF4EA 62%,#D8E8C8 100%)}
+/* ---------- Campo animado de la pantalla de Inicio ---------- */
+.hero{display:block;width:100%;height:auto;max-height:230px;margin:0;background:linear-gradient(#CFE6F2 0%,#EAF4EA 62%,#D8E8C8 100%)}
 .hero .sol{transform-origin:600px 56px}
 .hero .loma1{fill:#8DBF7B}.hero .loma2{fill:#6FA865}.hero .surco{stroke:#4C8A47;stroke-width:3;fill:none;stroke-linecap:round}
 .hero .nube{fill:#fff;opacity:.92}

@@ -69,3 +69,16 @@ function veredicto(apt,F,c,W){
   if(F.margen<.15||apt.total<.7||(c.tipo==="per"&&(F.payback===null||F.payback>6)))return{k:"mid",t:"Rentabilidad baja",why:"Puede ganar, pero el margen es estrecho o el cultivo no está en su zona ideal. Un mal precio o un mal invierno se lleva la ganancia."};
   return{k:"ok",t:"Sí, es rentable",why:"El cultivo se adapta a la zona y deja buen margen con los precios de referencia."};
 }
+// Los cultivos que más rinden en un lugar (para la pantalla de Inicio). Solo cuenta los que no tienen veredicto "no".
+// Se ordena por ganancia promedio por año. Con "solo lluvia" solo cuenta el manejo tradicional: sin fuente de agua no se puede planear riego.
+function topCultivos(L,{ha=1,suelo="franco",ph=null,D={f:"lluvia",dia:0},uso="ceba",grupo="agr",n=5}={}){
+  return Object.keys(C).filter(k=>C[k].g===grupo).map(k=>{
+    const c=C[k],A=agua(c,L,ha),met=A.mejor,sup={p:c.tipo==="pasto"?(uso==="leche"?c.pLeche:c.pCarne):c.p,y:c.y,est:c.est,man:c.man};
+    const opciones=["trad","riego","auto"].map(modo=>{
+      const apt=aptitud(c,L,suelo,ph,modo),F=finanzas(c,L,ha,modo,met,A,sup,uso),haMax=haPosibles(D,A.m[met],ha);
+      return{modo,apt,F,v:veredicto(apt,F,c,{modo,haMax,ha,met})};
+    }).filter(o=>o.v.k!=="no").sort((a,b)=>b.F.acum-a.F.acum);
+    const r=opciones[0];
+    return r&&r.apt.total>=.6?{k,c,modo:r.modo,apt:r.apt,F:r.F,v:r.v,prom:r.F.acum/r.F.H}:null;
+  }).filter(Boolean).sort((a,b)=>b.prom-a.prom).slice(0,n);
+}

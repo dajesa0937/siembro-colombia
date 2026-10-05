@@ -4,13 +4,15 @@
 // ---------- Clima (Open-Meteo, gratis y sin clave) ----------
 const WMO={0:"Despejado",1:"Mayormente despejado",2:"Parcialmente nublado",3:"Nublado",45:"Niebla",48:"Niebla",51:"Llovizna débil",53:"Llovizna",55:"Llovizna fuerte",61:"Lluvia débil",63:"Lluvia moderada",65:"Lluvia fuerte",80:"Chubascos",81:"Chubascos fuertes",82:"Aguaceros muy fuertes",95:"Tormenta eléctrica",96:"Tormenta con granizo",99:"Tormenta con granizo"};
 function lugarClima(){if(ubicPropia)return ubicPropia;const L=lugar();if(L.lat==null)return null;return{lat:L.lat,lon:L.lon,nombre:`${L.mun}, ${L.dep}`};}
+// Dirección del pronóstico: la usan la pestaña Clima y la pantalla de Inicio (guardan el mismo dato).
+const urlClima=U=>`https://api.open-meteo.com/v1/forecast?latitude=${U.lat}&longitude=${U.lon}&current=temperature_2m,relative_humidity_2m,precipitation,wind_speed_10m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,et0_fao_evapotranspiration&timezone=America%2FBogota&forecast_days=7`;
 async function cargarClima(forzar){
   const U=lugarClima();
   if(!U){$("climaOut").innerHTML=`<div class="empty"><h2>Elija un municipio o use su ubicación</h2><p>Para "Otro lugar" toque "Usar mi ubicación" y la app busca el pronóstico de donde está.</p></div>`;$("cLugar").textContent="Clima";return;}
   const key=`siembro:clima:${U.lat.toFixed(2)},${U.lon.toFixed(2)}`;
   if(!forzar&&climaCargado===key)return;
   $("cLugar").textContent="Clima en "+U.nombre;
-  const url=`https://api.open-meteo.com/v1/forecast?latitude=${U.lat}&longitude=${U.lon}&current=temperature_2m,relative_humidity_2m,precipitation,wind_speed_10m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,et0_fao_evapotranspiration&timezone=America%2FBogota&forecast_days=7`;
+  const url=urlClima(U);
   try{const r=await fetch(url);if(!r.ok)throw new Error(r.status);const j=await r.json();
     try{localStorage.setItem(key,JSON.stringify({t:Date.now(),j}));}catch(e){}
     climaCargado=key;pintarClima(j,null);}

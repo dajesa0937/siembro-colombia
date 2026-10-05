@@ -2,8 +2,10 @@
 // Archivo cargado como script clásico: las constantes y funciones quedan globales y las usan los demás archivos.
 
 document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>abrirTab(b.dataset.tab));
+const TITULOS={inicio:"Siembro Colombia",calc:"Calculadora de rentabilidad",clima:"Clima y riego",cultivos:"Fichas de cultivos",guia:"Guía para el campo"};
 function abrirTab(t){document.querySelectorAll("nav.tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===t));
-  ["calc","clima","cultivos","guia"].forEach(x=>$("tab-"+x).hidden=x!==t);scrollTo(0,0);if(t==="clima")cargarClima();if(t==="cultivos"&&!$("fichaOut").innerHTML)pintarFicha();if(t==="guia")cargarFotos($("tab-guia"));}
+  ["inicio","calc","clima","cultivos","guia"].forEach(x=>$("tab-"+x).hidden=x!==t);$("barTitulo").textContent=TITULOS[t];scrollTo(0,0);
+  if(t==="inicio")pintarInicio();if(t==="clima")cargarClima();if(t==="cultivos"&&!$("fichaOut").innerHTML)pintarFicha();if(t==="guia")cargarFotos($("tab-guia"));}
 
 const deps=[...new Set(MUN.map(m=>m[0]))];
 $("dep").innerHTML=deps.map(d=>`<option>${d}</option>`).join("")+`<option value="__otro">Otro lugar (ingresar clima)</option>`;
