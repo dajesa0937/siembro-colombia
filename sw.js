@@ -1,6 +1,6 @@
 // Siembro Colombia — service worker: la app funciona sin internet en el campo.
 // IMPORTANTE: suba VERSION cada vez que publique cambios para que los celulares se actualicen.
-const VERSION = 'siembrocolombia-v11';
+const VERSION = 'siembrocolombia-v12';
 const SHELL = [
   './', './index.html', './manifest.webmanifest', './css/estilos.css', './css/animaciones.css',
   './js/utilidades.js', './js/datos/municipios.js', './js/datos/cultivos.js', './js/datos/fichas.js',
@@ -10,7 +10,10 @@ const SHELL = [
 ];
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(VERSION).then(c => c.addAll(SHELL.map(u => new Request(u, { cache: 'reload' })))).then(() => self.skipWaiting()));
+  // Los archivos de la app son obligatorios; si una foto falta, la instalación sigue (la foto simplemente no se guarda).
+  e.waitUntil(caches.open(VERSION)
+    .then(c => Promise.all(SHELL.map(u => c.add(new Request(u, { cache: 'reload' })).catch(err => { if (!u.startsWith('./img/')) throw err; }))))
+    .then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', e => {

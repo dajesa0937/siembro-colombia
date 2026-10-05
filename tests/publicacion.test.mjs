@@ -63,3 +63,10 @@ test('las fotos de la finca existen y están en la lista del service worker (se 
     assert.ok(shell.includes(f), `${f} falta en SHELL de sw.js`);
   }
 });
+
+test('el flujo de GitHub publica todas las carpetas y archivos que usa la app (si falta una, no se ve en el sitio)', () => {
+  const flujo = leer('.github/workflows/pruebas.yml');
+  const copiados = flujo.match(/cp -r ([^\n]+) _site\//)[1].split(/\s+/);
+  const usados = new Set([...shell.map(f => f.split('/')[0]), 'index.html', 'sw.js', 'manifest.webmanifest']);
+  for (const u of usados) assert.ok(copiados.includes(u), `el flujo no copia "${u}" a _site`);
+});
