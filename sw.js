@@ -1,6 +1,6 @@
 // Siembro Colombia — service worker: la app funciona sin internet en el campo.
 // IMPORTANTE: suba VERSION cada vez que publique cambios para que los celulares se actualicen.
-const VERSION = 'siembrocolombia-v8';
+const VERSION = 'siembrocolombia-v9';
 const SHELL = [
   './', './index.html', './manifest.webmanifest', './css/estilos.css', './css/animaciones.css',
   './js/utilidades.js', './js/datos/municipios.js', './js/datos/cultivos.js', './js/datos/fichas.js',

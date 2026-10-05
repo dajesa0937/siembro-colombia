@@ -1,5 +1,10 @@
 # Cambios
 
+## 1.4.0 — 2026-10-05
+- Pantalla de bienvenida (solo la primera vez) como el mockup: paisaje, lema, botones Cultivos, Ganadería, Clima y Finanzas, y botón Comenzar.
+- Inicio con banner de paisaje ("¡Hola!") y fotos de cada cultivo en la lista de lo que más rinde. Las fotos vienen de Wikimedia Commons (con enlace a la fuente); sin internet o sin foto queda un fondo verde y un dibujo.
+- Pruebas nuevas: botones de Inicio, bienvenida y títulos de foto de cada cultivo.
+
 ## 1.3.0 — 2026-10-04
 - Diseño nuevo: barra verde arriba, tarjetas, barra inferior de 5 botones (Inicio, Calcular, Clima, Cultivos, Guía) y letra Source Sans 3.
 - Pantalla de Inicio: su finca (clima del lugar), el pronóstico de hoy, atajos y los 5 cultivos o pastos que más rinden en su zona. Al tocar uno se abre el cálculo completo.

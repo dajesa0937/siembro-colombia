@@ -40,3 +40,15 @@ test('el service worker pide los archivos propios a la red primero (evita mezcla
   assert.match(sw, /cache: 'reload'/, 'la instalación debe saltarse la caché del navegador');
   assert.match(sw, /url\.origin === location\.origin\) \{\s*e\.respondWith\(fetch\(req, \{ cache: 'no-cache' \}\)/, 'los archivos propios deben ir red primero');
 });
+
+test('los botones con data-ir llevan a una pestaña que existe (o a ganadería)', () => {
+  for (const [, d] of html.matchAll(/data-ir="([a-z]+)"/g)) {
+    assert.ok(d === 'ganaderia' || html.includes(`id="tab-${d}"`), `data-ir="${d}" no tiene pestaña`);
+  }
+});
+
+test('la bienvenida tiene su botón Comenzar y la pantalla de Inicio sus contenedores de fotos', () => {
+  for (const id of ['bienvenida', 'comenzar', 'bienvFondo', 'heroBox', 'bannerCred', 'top5', 'iniFinca']) {
+    assert.ok(html.includes(`id="${id}"`), `falta id="${id}" en index.html`);
+  }
+});

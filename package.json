@@ -1,6 +1,6 @@
 {
   "name": "siembro-colombia",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "PWA para agricultores y ganaderos de Colombia: rentabilidad de cultivos, agua, riego, clima y fichas técnicas.",
   "private": true,
   "scripts": {

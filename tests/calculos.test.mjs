@@ -78,3 +78,7 @@ test('topCultivos: sin agua disponible solo propone manejo tradicional', () => {
 test('topCultivos: el grupo de pastos solo trae pastos y forrajes', () => {
   for (const t of topCultivos(lugar('Planeta Rica'), { grupo: 'for', n: 30 })) assert.equal(t.c.g, 'for');
 });
+
+test('cada cultivo tiene títulos de Wikipedia para su foto (miniaturas del Inicio y fichas)', () => {
+  for (const k of Object.keys(C)) assert.ok(Array.isArray(FICHA[k].w) && FICHA[k].w.length > 0, `${k} sin títulos de foto`);
+});
