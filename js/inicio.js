@@ -31,7 +31,7 @@ function pintarInicio(){
     $("atAbono").textContent="Elija un cultivo y vea cuánto abono necesita.";
   }
   $("atGan").textContent=pas?`${pas.c.n}: aguanta unos ${num(pas.F.ugg,1)} animales por hectárea. Rote los potreros.`:"Pasto recomendado y rotación de potreros.";
-  climaInicio();precargarNormales();
+  pintarMas();climaInicio();precargarNormales();
 }
 
 // ---------- Clima de hoy (usa el mismo pronóstico guardado que la pantalla Clima) ----------

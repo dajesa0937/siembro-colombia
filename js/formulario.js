@@ -3,21 +3,21 @@
 
 // ---------- Pantallas ----------
 // nav = botón de la barra inferior que queda marcado; padre = adónde lleva la flecha de volver si no hay historial.
-const PRINC=["inicio","cultivos","ganaderia","finanzas","mas"];
+const PRINC=["inicio","cultivos","ganaderia","clima","finanzas"];
 const VISTAS={
   inicio:{t:"Siembro Colombia",nav:"inicio"},cultivos:{t:"Cultivos",nav:"cultivos"},ganaderia:{t:"Pastoreo y ganadería",nav:"ganaderia"},
-  finanzas:{t:"Mi finca",nav:"finanzas"},mas:{t:"Más",nav:"mas"},
+  finanzas:{t:"Mi finca",nav:"finanzas"},
   calc:{t:"Calculadora integral",nav:"finanzas",padre:"finanzas"},cuando:{t:"¿Cuándo sembrar?",nav:"cultivos",padre:"cultivos"},
   semillas:{t:"Semillas recomendadas",nav:"cultivos",padre:"cultivos"},riego:{t:"Agua y riego",nav:"cultivos",padre:"cultivos"},
-  abonos:{t:"Abonos y fertilización",nav:"cultivos",padre:"cultivos"},fichas:{t:"Fichas de cultivos",nav:"cultivos",padre:"cultivos"},
-  clima:{t:"Clima y pronóstico",nav:"mas",padre:"mas"},guia:{t:"Guía para el campo",nav:"mas",padre:"mas"},historial:{t:"Historial de cálculos",nav:"finanzas",padre:"finanzas"}
+  abonos:{t:"Abonos y fertilización",nav:"cultivos",padre:"cultivos"},fichas:{t:"Fichas de cultivos",nav:["fichas","cultivos"],padre:"cultivos"},
+  clima:{t:"Clima y pronóstico",nav:"clima"},guia:{t:"Guía para el campo",nav:["guia","inicio"],padre:"inicio"},historial:{t:"Historial de cálculos",nav:["historial","finanzas"],padre:"finanzas"}
 };
 let vistaActual="inicio",navN=0;
 document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>abrirTab(b.dataset.tab));
 function abrirTab(t,o={}){
   if(!VISTAS[t])t="inicio";
   const V=VISTAS[t],sub=!PRINC.includes(t);
-  document.querySelectorAll("nav.tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===V.nav));
+  document.querySelectorAll("nav.tabs button").forEach(b=>b.setAttribute("aria-selected",[].concat(V.nav).includes(b.dataset.tab)));
   Object.keys(VISTAS).forEach(x=>{const e=$("tab-"+x);if(e)e.hidden=x!==t;});
   $("barTitulo").textContent=V.t;$("atras").hidden=!sub;$("barLogo").hidden=sub;
   if(!o.sinHistorial&&t!==vistaActual){try{history.pushState({v:t,n:++navN},"");}catch(e){}}

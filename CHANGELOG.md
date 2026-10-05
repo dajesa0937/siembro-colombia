@@ -1,5 +1,9 @@
 # Cambios
 
+## 1.6.2 — 2026-10-05
+- Se quitó el botón "Más", que escondía opciones. Ahora la barra de abajo tiene cinco botones siempre visibles: Inicio, Cultivos, Ganadería, Clima y Finanzas.
+- Fichas, Historial y Guía se ven en la barra de arriba en computador y, en el celular, en la lista "Más herramientas" al final de Inicio (junto con "Ver la bienvenida").
+
 ## 1.6.1 — 2026-10-05
 - Arriba de cada pantalla: el botón "Volver" ahora tiene texto y borde, y "Cambiar lugar" es un botón visible (antes era un enlace pequeño).
 - Los botones de pestañas de cada pantalla (Hoy, 16 días, Mes…; Pasto/Ganado; Por cultivo/Por clima…) ahora son botones grandes con borde, separados y siempre visibles; en Clima quedan en dos filas de tres.

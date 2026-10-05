@@ -405,3 +405,7 @@ ul.dias16{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:6px}
 .appbar .atras svg{width:22px;height:22px}
 .lugar-chip{flex-wrap:wrap;gap:6px 10px}
 .lugar-chip button.sec{min-height:38px;padding:6px 14px;font-size:.88rem;margin-left:auto}
+
+/* Botones extra de la barra solo en pantalla grande (en el celular están en Cultivos, Finanzas e Inicio) */
+nav.tabs button.pc{display:none}
+@media(min-width:900px){nav.tabs button.pc{display:flex}}

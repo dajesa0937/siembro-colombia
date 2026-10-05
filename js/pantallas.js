@@ -23,7 +23,7 @@ function pintarIconos(root=document){root.querySelectorAll("[data-ico]:not([data
 // ---------- Qué se pinta al abrir cada pantalla ----------
 function pintarVista(t){
   pintarIconos();pintarChips();
-  ({cultivos:pintarCultivos,ganaderia:pintarGanaderia,finanzas:pintarFinanzas,mas:pintarMas,calc:pintarCalc,cuando:pintarCuando,semillas:pintarSemillas,
+  ({cultivos:pintarCultivos,ganaderia:pintarGanaderia,finanzas:pintarFinanzas,calc:pintarCalc,cuando:pintarCuando,semillas:pintarSemillas,
     riego:pintarRiego,abonos:pintarAbonos,fichas:pintarFicha,historial:pintarHistorial,inicio:pintarInicio,
     clima:()=>{if(climaJ)renderClima();cargarClima();},guia:()=>cargarFotos($("tab-guia"))})[t]();
 }

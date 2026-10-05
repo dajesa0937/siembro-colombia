@@ -47,8 +47,11 @@
 <button role="tab" aria-selected="true" data-tab="inicio"><span class="ic" data-ico="home"></span>Inicio</button>
 <button role="tab" aria-selected="false" data-tab="cultivos"><span class="ic" data-ico="hoja"></span>Cultivos</button>
 <button role="tab" aria-selected="false" data-tab="ganaderia"><span class="ic" data-ico="vaca"></span>Ganadería</button>
+<button role="tab" aria-selected="false" data-tab="clima"><span class="ic" data-ico="nube"></span>Clima</button>
 <button role="tab" aria-selected="false" data-tab="finanzas"><span class="ic" data-ico="barras"></span>Finanzas</button>
-<button role="tab" aria-selected="false" data-tab="mas"><span class="ic" data-ico="mas"></span>Más</button>
+<button role="tab" aria-selected="false" data-tab="fichas" class="pc"><span class="ic" data-ico="foto"></span>Fichas</button>
+<button role="tab" aria-selected="false" data-tab="historial" class="pc"><span class="ic" data-ico="reloj"></span>Historial</button>
+<button role="tab" aria-selected="false" data-tab="guia" class="pc"><span class="ic" data-ico="libro"></span>Guía</button>
 </nav>
 
 <!-- ============ INICIO ============ -->
@@ -95,6 +98,13 @@
     </div>
     <div class="card pwa-card" id="pwaCard"><button type="button" class="sec lleno" id="instalar" hidden>Instalar en el celular</button>
       <p class="hint" id="iosTip" hidden>En iPhone: toque Compartir en Safari y luego "Agregar a pantalla de inicio".</p></div>
+    <h2 class="sec-t">Más herramientas</h2>
+    <div class="lista">
+    <button type="button" data-ir="fichas"><span class="ci" data-ico="foto"></span><span><b>Fichas de cultivos</b><small>Fotos, distancia de siembra, plagas y abonos.</small></span></button>
+    <button type="button" data-ir="historial"><span class="ci" data-ico="reloj"></span><span><b>Historial de cálculos</b><small id="masHist">Los cálculos que ha hecho en este celular.</small></span></button>
+    <button type="button" data-ir="guia"><span class="ci" data-ico="libro"></span><span><b>Guía para el campo</b><small>Cómo medir su agua, ahorrar riego y cuándo no sembrar.</small></span></button>
+    <button type="button" id="verBienvenida"><span class="ci" data-ico="hoja"></span><span><b>Ver la bienvenida</b><small>Volver a la pantalla de inicio de la app.</small></span></button>
+  </div>
   </div>
 </div>
 </section>
@@ -138,18 +148,6 @@
 </section>
 
 <!-- ============ MÁS ============ -->
-<section id="tab-mas" role="tabpanel" hidden>
-<div class="vista">
-  <div class="lista">
-    <button type="button" data-ir="clima"><span class="ci agua" data-ico="nube"></span><span><b>Clima y pronóstico</b><small>Lluvia de los próximos 7 días y si hoy toca regar.</small></span></button>
-    <button type="button" data-ir="fichas"><span class="ci" data-ico="foto"></span><span><b>Fichas de cultivos</b><small>Fotos, distancia de siembra, plagas y abonos.</small></span></button>
-    <button type="button" data-ir="historial"><span class="ci" data-ico="reloj"></span><span><b>Historial de cálculos</b><small id="masHist">Los cálculos que ha hecho en este celular.</small></span></button>
-    <button type="button" data-ir="guia"><span class="ci" data-ico="libro"></span><span><b>Guía para el campo</b><small>Cómo medir su agua, ahorrar riego y cuándo no sembrar.</small></span></button>
-    <button type="button" id="verBienvenida"><span class="ci" data-ico="hoja"></span><span><b>Ver la bienvenida</b><small>Volver a la pantalla de inicio de la app.</small></span></button>
-  </div>
-  <p class="hint centro">Siembro Colombia · valores de referencia, confirme con su UMATA o un agrónomo antes de invertir.</p>
-</div>
-</section>
 
 <!-- ============ CALCULADORA ============ -->
 <section id="tab-calc" role="tabpanel" hidden>

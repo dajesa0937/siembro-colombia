@@ -38,7 +38,7 @@ siembro/
 │   ├── fichas-ui.js        Fotos de Wikimedia, dibujo de distancia y pestaña Cultivos
 │   ├── clima.js            Pronóstico Open-Meteo y riego del día
 │   ├── inicio.js           Pantalla de Inicio (su finca y atajos), bienvenida y botones
-│   ├── pantallas.js        Cultivos, ¿Cuándo sembrar?, Semillas, Riego, Abonos, Ganadería, Finanzas, Historial y Más
+│   ├── pantallas.js        Cultivos, ¿Cuándo sembrar?, Semillas, Riego, Abonos, Ganadería, Finanzas y Historial
 │   └── app.js              Arranque, instalación y datos guardados
 ├── tests/                  Pruebas: calculos.test.mjs (cálculos) y publicacion.test.mjs (sin conexión y rutas)
 ├── .github/workflows/pruebas.yml  Pruebas automáticas en GitHub
