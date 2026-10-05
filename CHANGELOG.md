@@ -1,5 +1,14 @@
 # Cambios
 
+## 1.8.0 — 2026-10-05
+- Cálculo de bomba rehecho. Antes usaba siempre 30 m de altura y 60 % de eficiencia. Ahora calcula la altura total (TDH) con: profundidad del agua o altura de succión, desnivel del lote, roce en la tubería (Hazen-Williams, con 15 % por accesorios), presión que pide cada sistema de riego (goteo, cinta, microaspersión, aspersión, surcos) y filtros.
+- Escoge la tubería más delgada que no pase de 1,5 m/s y dice cuántos kW se ahorran con un tubo más grueso.
+- Potencia: hidráulica (ρ·g·Q·H), en el eje según el estado de la bomba (70 / 60 / 45 %), con eficiencia del motor, 15 % de reserva y tamaño comercial en HP; kWh por m³ (2,725 × H ÷ η, FAO).
+- Revisa la succión según la altitud (presión del aire y vapor del agua): avisa cuando una bomba de superficie no sube el agua a esa altura y recomienda sumergible.
+- Costo por día, por mes seco y por m³ con electricidad (precio del kWh editable), motor diésel (galón de ACPM editable) o paneles solares (Wp aproximados).
+- Nueva tarjeta "Bomba y energía" en Agua y riego (cultivos) con todas esas variables; la calculadora usa la misma cuenta.
+- Funciones nuevas y reutilizables en `js/calculos.js` (con pruebas): `presionAtmM`, `presionVaporM`, `tuboParaCaudal`, `perdidaHW`, `alturaBombeo`, `potenciaBomba`, `kWhBombeo`, `revisarSuccion`, `litrosDiesel`, `panelesSolares`, `sistemaBombeo`.
+
 ## 1.7.1 — 2026-10-05
 - Calculadora, pastos: ya no dice "No lo siembre, pierde dinero" cuando el pasto deja ganancia cada año. Antes lo decía si la inversión no se recuperaba en 8 años, aunque el pasto durara mucho más. Ahora los pastos se evalúan a 10 años.
 - Veredictos más claros: "pierde dinero" solo si en plena producción gasta más de lo que vende; "Gana casi nada" si deja menos del 5 % anual de lo invertido (menos que un CDT); "Gana poco: la inversión demora en volver" si gana pero no recupera lo invertido.

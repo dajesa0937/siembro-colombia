@@ -6,10 +6,10 @@ import vm from 'node:vm';
 
 const archivos = ['js/utilidades.js', 'js/datos/municipios.js', 'js/datos/cultivos.js', 'js/datos/fichas.js', 'js/datos/pastos.js', 'js/calculos.js'];
 const codigo = archivos.map(f => readFileSync(new URL('../' + f, import.meta.url), 'utf8')).join('\n') +
-  '\nthis.api={PASTOS,kgSemillaPasto,costoSemillaPasto,recomendarPastos,MUN,C,METODOS,FICHA,ZONAS,ZMUN,aptitud,agua,haPosibles,finanzas,veredicto,topCultivos,MESES,lluviaMensual,calendarioSiembra,rangoMeses,frecuenciaRiego,dosisAbono,desgloseCostos,rotacion,resumenClimatico,periodoMeses,mesesAproximados,balanceMes,indiceForraje,recomendacionesPeriodo,recomendacionesPronostico};';
+  '\nthis.api={perdidaHW,presionAtmM,presionVaporM,potenciaBomba,kWhBombeo,tuboParaCaudal,alturaBombeo,sistemaBombeo,revisarSuccion,panelesSolares,litrosDiesel,PASTOS,kgSemillaPasto,costoSemillaPasto,recomendarPastos,MUN,C,METODOS,FICHA,ZONAS,ZMUN,aptitud,agua,haPosibles,finanzas,veredicto,topCultivos,MESES,lluviaMensual,calendarioSiembra,rangoMeses,frecuenciaRiego,dosisAbono,desgloseCostos,rotacion,resumenClimatico,periodoMeses,mesesAproximados,balanceMes,indiceForraje,recomendacionesPeriodo,recomendacionesPronostico};';
 const ctx = vm.createContext({ Intl, Math, Number, Object, Array, JSON });
 vm.runInContext(codigo, ctx);
-const { PASTOS, kgSemillaPasto, costoSemillaPasto, recomendarPastos, MUN, C, METODOS, FICHA, ZONAS, ZMUN, aptitud, agua, haPosibles, finanzas, veredicto, topCultivos, MESES, lluviaMensual, calendarioSiembra, rangoMeses, frecuenciaRiego, dosisAbono, desgloseCostos, rotacion, resumenClimatico, periodoMeses, mesesAproximados, balanceMes, indiceForraje, recomendacionesPeriodo, recomendacionesPronostico } = ctx.api;
+const { perdidaHW, presionAtmM, presionVaporM, potenciaBomba, kWhBombeo, tuboParaCaudal, alturaBombeo, sistemaBombeo, revisarSuccion, panelesSolares, litrosDiesel, PASTOS, kgSemillaPasto, costoSemillaPasto, recomendarPastos, MUN, C, METODOS, FICHA, ZONAS, ZMUN, aptitud, agua, haPosibles, finanzas, veredicto, topCultivos, MESES, lluviaMensual, calendarioSiembra, rangoMeses, frecuenciaRiego, dosisAbono, desgloseCostos, rotacion, resumenClimatico, periodoMeses, mesesAproximados, balanceMes, indiceForraje, recomendacionesPeriodo, recomendacionesPronostico } = ctx.api;
 
 const lugar = nombre => { const m = MUN.find(x => x[1] === nombre); return { dep: m[0], mun: m[1], reg: m[2], alt: m[3], t: m[4], r: m[5], dry: m[6], lat: m[7], lon: m[8] }; };
 const base = c => ({ p: c.tipo === 'pasto' ? c.pCarne : c.p, y: c.y, est: c.est, man: c.man });
@@ -297,4 +297,64 @@ test('veredicto: ganancia chiquita frente a la inversión no es "rentable"; gana
 test('pasto de clima cálido con riego en una zona húmeda: no conviene (cuesta más de lo que da)', () => {
   const { v } = evaluar('pastoT', 'Tierralta', { modo: 'riego' });
   assert.notEqual(v.k, 'ok');
+});
+
+// ---------- Bombeo ----------
+const cerca = (a, b, tol) => assert.ok(Math.abs(a - b) <= tol, `${a} no está cerca de ${b} (±${tol})`);
+
+test('bombeo: potencia hidráulica = ρ·g·Q·H (10 L/s a 30 m = 2,94 kW) y en el eje se divide por la eficiencia', () => {
+  const P = potenciaBomba(10, 30, { etaB: 0.6 });
+  cerca(P.hid, 2.943, 0.001); cerca(P.eje, 4.905, 0.001);
+  assert.ok(P.motor > P.eje && P.elec > P.eje);
+  assert.ok(P.hpCom >= P.hp && [0.5, 0.75, 1, 1.5, 2, 3, 5, 7.5, 10, 15].includes(P.hpCom));
+});
+
+test('bombeo: energía por m³ = 2,725 · H / η (FAO): 30 m con 50 % da 0,1635 kWh/m³', () => {
+  cerca(kWhBombeo(1, 30, 0.5), 0.1635, 1e-9);
+  cerca(kWhBombeo(1000, 30, 0.5), 163.5, 1e-6);
+  assert.equal(kWhBombeo(10, 30, 0), 0);
+});
+
+test('bombeo: pérdida Hazen-Williams (10 L/s, tubo de 100 mm, 100 m, C = 150 ≈ 1,46 m) y crece con el caudal y baja con el diámetro', () => {
+  cerca(perdidaHW(10, 100, 100), 1.459, 0.01);
+  assert.ok(perdidaHW(20, 100, 100) > perdidaHW(10, 100, 100) * 3.5);
+  assert.ok(perdidaHW(10, 78, 100) > perdidaHW(10, 100, 100));
+  assert.equal(perdidaHW(0, 100, 100), 0);
+  assert.equal(perdidaHW(10, 100, 0), 0);
+});
+
+test('bombeo: presión atmosférica baja con la altura y la de vapor sube con la temperatura', () => {
+  cerca(presionAtmM(0), 10.33, 0.01); cerca(presionAtmM(2600), 7.52, 0.05);
+  assert.ok(presionAtmM(1500) < presionAtmM(500));
+  cerca(presionVaporM(20), 0.239, 0.01);
+  assert.ok(presionVaporM(40) > presionVaporM(20));
+});
+
+test('bombeo: tubería que no pasa de 1,5 m/s', () => {
+  for (const q of [0.5, 2, 4, 8, 15, 30]) { const t = tuboParaCaudal(q); assert.ok(t.v <= 1.5 || t.pulg === 8, `q=${q}`); }
+  assert.ok(tuboParaCaudal(8).mm > tuboParaCaudal(1).mm);
+});
+
+test('bombeo: altura total suma estática, roce, accesorios, presión del riego y filtros; la aspersión gasta más presión que el goteo', () => {
+  const g = alturaBombeo({ q: 4, metodo: 'goteo', hs: 3, desnivel: 10, dist: 200 }), a = alturaBombeo({ q: 4, metodo: 'aspersion', hs: 3, desnivel: 10, dist: 200 });
+  cerca(g.tdh, g.estatica + g.friccion + g.locales + g.presion + g.filtros, 1e-9);
+  assert.equal(g.estatica, 13);
+  assert.ok(a.tdh > g.tdh + 15);
+});
+
+test('bombeo: un tubo más grueso baja la altura y los kW; sistemaBombeo lo compara', () => {
+  const s = sistemaBombeo({ q: 4, metodo: 'goteo', hs: 3, desnivel: 10, dist: 200, etaB: 0.6 });
+  assert.ok(s.mayor.pulg > s.H.tubo.pulg && s.mayor.H.tdh < s.H.tdh && s.mayor.ahorroKW > 0);
+});
+
+test('bombeo: a mayor altitud la bomba de superficie sube menos el agua; en Bogotá no sirve la misma succión que en Montería', () => {
+  const costa = revisarSuccion({ alt: 20, hs: 5 }), alto = revisarSuccion({ alt: 2600, hs: 5 });
+  assert.ok(costa.ok && !alto.ok);
+  assert.ok(alto.hsMax < costa.hsMax);
+  assert.ok(alto.hsMax >= 0);
+});
+
+test('bombeo: diésel y paneles dan números razonables', () => {
+  cerca(litrosDiesel(10), 2.7, 1e-9);
+  assert.ok(panelesSolares(1) >= 1333 && panelesSolares(1) % 50 === 0);
 });
