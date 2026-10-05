@@ -1,5 +1,8 @@
 # Cambios
 
+## 1.6.1 — 2026-10-05
+- Los botones de pestañas de cada pantalla (Hoy, 16 días, Mes…; Pasto/Ganado; Por cultivo/Por clima…) ahora son botones grandes con borde, separados y siempre visibles; en Clima quedan en dos filas de tres.
+
 ## 1.6.0 — 2026-10-05
 - Pantalla Clima con seis pestañas: Hoy, 16 días, Mes, 3 meses, 6 meses y Año. Cada una trae recomendaciones separadas para el cultivo y para el ganado.
 - Mes, 3 meses, 6 meses y Año usan el clima real de los últimos 10 años del lugar (Open-Meteo, se baja una sola vez y queda guardado). Muestran lluvia, temperatura, agua que falta para el cultivo elegido, pasto del ganado y los años más secos y más lluviosos. Sin conexión usan un cálculo aproximado y lo dicen.

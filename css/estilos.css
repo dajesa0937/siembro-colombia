@@ -384,3 +384,15 @@ ul.dias16{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:6px}
 .dias16 small{color:var(--muted);text-align:right}
 .lluvia.chico{height:130px}
 @media(max-width:380px){.dias16 li{grid-template-columns:70px 56px 1fr 50px}.dias16 small{display:none}}
+
+/* Botones de pestañas dentro de las pantallas: separados, con borde y grandes para que se vean y se toquen fácil */
+.seg.ancho{background:none;border:0;padding:0;gap:8px;flex-wrap:wrap;overflow:visible}
+.seg.ancho button{flex:1 1 0;min-width:0;min-height:46px;display:grid;place-items:center;padding:8px 10px;border:1.5px solid var(--leaf);border-radius:12px;background:var(--paper);color:var(--leaf);font-size:.95rem;font-weight:800;text-align:center;white-space:normal;line-height:1.15}
+.seg.ancho button[aria-pressed="true"]{background:var(--leaf);color:var(--on-leaf)}
+.seg6{display:grid;grid-template-columns:repeat(3,1fr);overflow:visible}
+.seg6 button{font-size:.95rem;padding:8px 6px}
+.card>.seg.ancho{margin:12px 0 0}
+.seg.ancho.seg6{display:grid;grid-template-columns:repeat(3,1fr)}
+.vista .scroll table{font-size:.86rem}
+.vista .scroll th,.vista .scroll td{padding:8px 4px}
+.vista .scroll td small{white-space:nowrap;color:var(--muted)}
